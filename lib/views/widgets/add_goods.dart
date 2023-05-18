@@ -25,8 +25,9 @@ class _AddGoodsState extends State<AddGoods> {
   final List<String> goodsTypeList = [
     '과자',
     '사탕',
-    '젤리와껌',
+    '젤리',
     '초콜릿',
+    '껌',
     '차,음료',
     '기타',
   ];

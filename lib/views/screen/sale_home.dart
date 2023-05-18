@@ -41,7 +41,9 @@ class _MyHomeState extends State<MyHome> {
     '사탕',
     '젤리',
     '초콜릿',
-    '기타',
+    '껌',
+    '차,음료'
+        '기타',
   ];
 
   headContainer(
