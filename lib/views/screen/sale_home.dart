@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
 import 'package:stockmanager/views/widgets/add_memo.dart';
+import 'package:stockmanager/views/widgets/components/goods_price_calculator.dart';
 
 import '../widgets/add_goods.dart';
 import 'detail_view.dart';
@@ -124,6 +125,13 @@ class _MyHomeState extends State<MyHome> {
                   Get.to(() => AddMemo());
                 },
                 icon: Icon(Icons.add_comment)),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    GoodsPriceCalculator();
+                  });
+                },
+                icon: Icon(Icons.calculate)),
             IconButton(
               tooltip: '상품정보입력',
               onPressed: () {
