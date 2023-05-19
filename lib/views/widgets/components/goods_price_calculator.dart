@@ -68,19 +68,26 @@ import 'package:stockmanager/controllers/stockmanager_controller.dart';
 // }
 
 class GoodsPriceCalculator {
+  final _formkey = GlobalKey<FormState>();
+  String costPrice = '';
+  String commissionRate = '';
+  String earningRate = '';
+  String sellingPrice = '';
+  String deliveryCharge = '';
   @override
   GoodsPriceCalculator() {
     Get.dialog(
       AlertDialog(
         title: Text('상품 판매가 계산기 V1.0'),
         content: Form(
+          key: _formkey,
           child: Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                input_text('원가'),
-                input_text('수수료율'),
-                input_text('수익률'),
+                input_text('원가',costPrice),
+                input_text('수수료율', commissionRate),
+                input_text('수익률', earningRate),
                 Row(
                   children: [
                     Text('배송방법'),
@@ -102,6 +109,24 @@ class GoodsPriceCalculator {
                     ),
                   ],
                 ),
+                //무료배송이면 배송비 입력란이 나오게
+                // StockmanagerController.to.dropdownValue == '무료배송' ? input_text('배송비') : Container(),
+                SizedBox(height: 15),
+                ElevatedButton(
+                  onPressed: (){
+
+                  },
+                  child: Text('판매가 계산'),
+                ),
+                SizedBox(height: 15),
+                Row(
+                  children: [
+                    Text('상품 판매가'),
+                    SizedBox(width: 15
+                    ),
+                    Text('')
+                  ],
+                )
               ],
             ),
           ),
@@ -110,19 +135,32 @@ class GoodsPriceCalculator {
     );
   }
 
-  Widget input_text(String title) {
+  Widget input_text(String title, String formValue) {
     return Row(
       children: [
         Text(title),
         SizedBox(width: 15),
         Expanded(
             child: TextFormField(
-          onChanged: (val) {},
+          onChanged: (val) {
+            formValue = val;
+          },
         )),
       ],
     );
   }
+
+  sellingPriceCalculate(){
+    if(StockmanagerController.to.dropdownValue.value == '유료배송') {
+      sellingPrice = ((((int.parse(costPrice) / (1 - int.parse(earningRate) - int.parse(commissionRate))) /10).round())*10).toString();
+  } else if(StockmanagerController.to.dropdownValue.value == '무료배송') {
+      sellingPrice = (((((int.parse(costPrice)+int.parse(deliveryCharge)) / (1 - int.parse(earningRate) - int.parse(commissionRate))) /10).round())*10).toString();
+    }
+
+  }
 }
+
+
 
 // class DeliveryDropdownButton extends StatefulWidget {
 //   const DeliveryDropdownButton({Key? key}) : super(key: key);
