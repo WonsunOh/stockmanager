@@ -43,8 +43,8 @@ class _MyHomeState extends State<MyHome> {
     '젤리',
     '초콜릿',
     '껌',
-    '차,음료'
-        '기타',
+    '차,음료',
+    '기타',
   ];
 
   headContainer(
@@ -127,9 +127,10 @@ class _MyHomeState extends State<MyHome> {
                 icon: Icon(Icons.add_comment)),
             IconButton(
                 onPressed: () {
-                  setState(() {
-                    GoodsPriceCalculator();
-                  });
+                  // setState(() {
+                  //   GoodsPriceCalculator();
+                  // });
+                  GoodsPriceCalculator();
                 },
                 icon: Icon(Icons.calculate)),
             IconButton(
