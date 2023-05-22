@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/views/screen/detail_view.dart';
-import 'package:stockmanager/views/screen/sale_home.dart';
 
 import 'firebase_options.dart';
 import 'init_binding.dart';
+import 'views/screen/goods_list.dart';
+import 'views/screen/my_home.dart';
 import 'views/widgets/add_goods.dart';
 
 void main() async {
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         getPages: [
           // GetPage(name: '/', page: () => AddGoods()),
           GetPage(name: '/', page: () => MyHome()),
+          GetPage(name: '/glist', page: () => GoodsList()),
         ],
       ),
     );

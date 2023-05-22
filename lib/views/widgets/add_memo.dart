@@ -14,9 +14,9 @@ class AddMemo extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              children: [Text('제목'), TextFormField()],
+              children: [Text('제목'), Expanded(child: TextFormField()),],
             ),
-            TextFormField()
+            Expanded(child: TextFormField())
           ],
         ),
       ),

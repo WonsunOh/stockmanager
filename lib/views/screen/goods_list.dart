@@ -12,14 +12,14 @@ import 'package:stockmanager/views/widgets/components/goods_price_calculator.dar
 import '../widgets/add_goods.dart';
 import 'detail_view.dart';
 
-class MyHome extends StatefulWidget {
-  const MyHome({Key? key}) : super(key: key);
+class GoodsList extends StatefulWidget {
+  const GoodsList({Key? key}) : super(key: key);
 
   @override
-  State<MyHome> createState() => _MyHomeState();
+  State<GoodsList> createState() => _GoodsListState();
 }
 
-class _MyHomeState extends State<MyHome> {
+class _GoodsListState extends State<GoodsList> {
   var goodData =
       FirebaseFirestore.instance.collection('goodsData').count().get();
 
