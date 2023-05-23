@@ -19,73 +19,123 @@ class _MyHomeState extends State<MyHome> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('코스트고 재고관리 1.0', style: TextStyle(
-          fontSize: 20, fontWeight: FontWeight.bold,
-        ),),
+        title: const Text(
+          '코스트고 재고관리 1.0',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Container(
         margin: const EdgeInsets.all(15),
         child: Column(
           children: [
             const SizedBox(height: 30),
-            const Text('상품', style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold,
-            ),),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    TextButton(
-                      onPressed: (){
-                        // Get.toNamed('/gList');
-                        Get.to(()=>const GoodsList());
-                      },
-                      child: const Text('상품리스트', style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold,
-                      ),),
-                    ),
-                    const SizedBox(width: 25),
-                    TextButton(
-                      onPressed: (){
-                        // Get.toNamed('/gList');
-                        Get.to(()=>const AddGoods());
-                      },
-                      child: const Text('상품추가', style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold,
-                      ),),
-                    ),
-                  ],
-                ),
+            const Text(
+              '상품',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const GoodsList());
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: const Text(
+                        '상품리스트',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const AddGoods());
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: const Text(
+                        '상품추가',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // TextButton(
+                //   onPressed: (){
+                //     // Get.toNamed('/gList');
+                //     Get.to(()=>const GoodsList());
+                //   },
+                //   child: const Text('상품추가', style: TextStyle(
+                //     fontSize: 20, fontWeight: FontWeight.bold,
+                //   ),),
+                // ),
+                // const SizedBox(width: 25),
+                // TextButton(
+                //   onPressed: (){
+                //     // Get.toNamed('/gList');
+                //     Get.to(()=>const AddGoods());
+                //   },
+                //   child: const Text('상품추가', style: TextStyle(
+                //     fontSize: 20, fontWeight: FontWeight.bold,
+                //   ),),
+                // ),
+              ],
+            ),
             const SizedBox(height: 50),
-            const Text('제품', style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold,
-            ),),
+            const Text(
+              '제품',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                   children: [
                     TextButton(
-                      onPressed: (){
+                      onPressed: () {
                         // Get.toNamed('/gList');
-                        Get.to(()=>const ProductList());
+                        Get.to(() => const ProductList());
                       },
-                      child: const Text('제품리스트', style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold,
-                      ),),
+                      child: const Text(
+                        '제품리스트',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 25),
                     TextButton(
-                      onPressed: (){
+                      onPressed: () {
                         // Get.toNamed('/gList');
-                        Get.to(()=>const AddProduct());
+                        Get.to(() => const AddProduct());
                       },
-                      child: const Text('제품추가', style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold,
-                      ),),
+                      child: const Text(
+                        '제품추가',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),
