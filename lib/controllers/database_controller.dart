@@ -31,6 +31,6 @@ class DatabaseController extends GetxController {
 
   updatePicesGoodsStock(
       String? goodsStock, String itemStock, String item) async {
-    await FirestoreDb.updatePices(goodsStock!, itemStock, item);
+    await FirestoreDb.updatePicesGoods(goodsStock!, itemStock, item);
   }
 }
