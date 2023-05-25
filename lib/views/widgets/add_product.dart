@@ -223,7 +223,7 @@ class _AddProductState extends State<AddProduct> {
                       Container(
                         margin: EdgeInsets.only(right: 10),
                         width: 100,
-                        child: Text('goodsData.doc(itemNumber)'),
+                        child: Text('goodsData.doc(itemN'),
                       ),
                       Text('원'),
                       const SizedBox(width: 10),
