@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stockmanager/models/goods_firebase_model.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({Key? key}) : super(key: key);
@@ -10,7 +11,8 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  final goodsData = FirebaseFirestore.instance.collection('goodsData');
+  final goodsData = FirebaseFirestore.instance.collection('goodsData').get();
+  GoodsFirebaseModel? goodsModel;
 
   final _formkey1 = GlobalKey<FormState>();
   final _controll = TextEditingController();
@@ -111,7 +113,7 @@ class _AddProductState extends State<AddProduct> {
                           margin: EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
-                              itemNumber = value;
+                              p_itemNumber = value;
                             },
                           ),
                         ),
@@ -119,6 +121,8 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 30),
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
+                      //연관상품코드 - goodsData 컬렉션에 있는 코드와 현 제품의 코드를 매치시킨다.
+                      // 현 제품의 이름으로 자동완성 검색창을 띄운 후 선택하면 상품 코드가 뜨게
                       SizedBox(
                         width: 80,
                         child: Text(
@@ -223,7 +227,9 @@ class _AddProductState extends State<AddProduct> {
                       Container(
                         margin: EdgeInsets.only(right: 10),
                         width: 100,
-                        child: Text('goodsData.doc(itemN'),
+                        child: Text((int.parse(goodsModel!.price!) /
+                                int.parse(goodsModel!.number!))
+                            .toStringAsFixed(1)),
                       ),
                       Text('원'),
                       const SizedBox(width: 10),
