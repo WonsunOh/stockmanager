@@ -11,7 +11,7 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  final goodsData = FirebaseFirestore.instance.collection('goodsData').get();
+  final goodsData = FirebaseFirestore.instance.collection('goodsData');
   GoodsFirebaseModel? goodsModel;
 
   final _formkey1 = GlobalKey<FormState>();
@@ -36,14 +36,21 @@ class _AddProductState extends State<AddProduct> {
     '기타',
   ];
 
+
+
+
   late String _selectedValue;
+  late String _itemValue;
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _selectedValue = '과자';
+    _itemValue = '아이템 넘버';
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +83,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: const Text(
                           '카테고리',
                           style: TextStyle(
@@ -98,7 +105,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '제품코드',
                           style: TextStyle(
@@ -124,7 +131,7 @@ class _AddProductState extends State<AddProduct> {
                       //연관상품코드 - goodsData 컬렉션에 있는 코드와 현 제품의 코드를 매치시킨다.
                       // 현 제품의 이름으로 자동완성 검색창을 띄운 후 선택하면 상품 코드가 뜨게
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '연관상품코드',
                           style: TextStyle(
@@ -137,11 +144,40 @@ class _AddProductState extends State<AddProduct> {
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(right: 10),
-                          child: TextFormField(
-                            onChanged: (value) {
-                              itemNumber = value;
-                            },
-                          ),
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: goodsData.snapshots(),
+                            builder: (context, snapshot) {
+                              final List<DropdownMenuItem> goodsDropdownItems = [];
+                              if(!snapshot.hasData){
+
+                                return CircularProgressIndicator();
+
+                                } else {
+
+                                final items = snapshot.data?.docs;
+                                for (int i=0; i<items!.length; i++) {
+                                  var snap = snapshot.data?.docs[i];
+                                  goodsDropdownItems.add(
+                                    DropdownMenuItem(
+                                      value: snap?.id,
+                                      child: Text(snap!.id),
+                                    ),
+                                  );
+                                }
+                              }
+
+                              return DropdownButton(
+                                value: _itemValue,
+                                items: goodsDropdownItems,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _itemValue = value;
+                                  });
+
+                                },
+                              );
+                            }
+                          )
                         ),
                       ),
                     ],
@@ -157,7 +193,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '제품명',
                           style: TextStyle(
@@ -188,7 +224,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '원료의 갯수',
                           style: TextStyle(
@@ -214,7 +250,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '개당 원가',
                           style: TextStyle(
@@ -227,9 +263,9 @@ class _AddProductState extends State<AddProduct> {
                       Container(
                         margin: EdgeInsets.only(right: 10),
                         width: 100,
-                        child: Text((int.parse(goodsModel!.price!) /
-                                int.parse(goodsModel!.number!))
-                            .toStringAsFixed(1)),
+                        // child: Text((int.parse(goodsModel!.price!) /
+                        //         int.parse(goodsModel!.number!))
+                        //     .toStringAsFixed(1)),
                       ),
                       Text('원'),
                       const SizedBox(width: 10),
@@ -245,7 +281,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '제품판매가격',
                           style: TextStyle(
@@ -279,7 +315,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '수수료율',
                           style: TextStyle(
@@ -312,7 +348,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '수익률',
                           style: TextStyle(
@@ -346,7 +382,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '상품재고량',
                           style: TextStyle(
@@ -404,7 +440,7 @@ class _AddProductState extends State<AddProduct> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 80,
+                        width: 90,
                         child: const Text(
                           'memo',
                           style: TextStyle(
