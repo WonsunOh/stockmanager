@@ -1,3 +1,5 @@
+//기초상품들의 데이터베이스
+
 class GoodsFirebaseModel {
   String? itemNumber;
   String? category;
