@@ -40,7 +40,7 @@ class _AddProductState extends State<AddProduct> {
 
 
   late String _selectedValue;
-  late String _itemValue;
+
 
 
   @override
@@ -48,7 +48,6 @@ class _AddProductState extends State<AddProduct> {
     // TODO: implement initState
     super.initState();
     _selectedValue = '과자';
-    _itemValue = '아이템 넘버';
   }
 
 
@@ -159,20 +158,21 @@ class _AddProductState extends State<AddProduct> {
                                   var snap = snapshot.data?.docs[i];
                                   goodsDropdownItems.add(
                                     DropdownMenuItem(
-                                      value: snap?.id,
-                                      child: Text(snap!.id),
+                                      value: snap,
+                                      child: Text('$snap'),
                                     ),
                                   );
                                 }
                               }
+                              String? _itemValue = snapshot.data?.docs[0].toString();
 
                               return DropdownButton(
-                                value: _itemValue,
+                                value: snapshot.data?.docs[0],
                                 items: goodsDropdownItems,
                                 onChanged: (value) {
-                                  setState(() {
-                                    _itemValue = value;
-                                  });
+                                  // setState(() {
+                                  //   _itemValue = value;
+                                  // });
 
                                 },
                               );

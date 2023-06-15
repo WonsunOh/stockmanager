@@ -120,11 +120,7 @@ class _GoodsListState extends State<GoodsList> {
             ],
           ),
           actions: [
-            IconButton(
-                onPressed: () {
-                  Get.to(() => AddMemo());
-                },
-                icon: Icon(Icons.add_comment)),
+
             IconButton(
                 onPressed: () {
                   // setState(() {

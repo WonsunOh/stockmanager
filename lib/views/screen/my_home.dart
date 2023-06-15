@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:stockmanager/views/screen/goods_list.dart';
 import 'package:stockmanager/views/widgets/add_goods.dart';
 
+import '../widgets/add_memo.dart';
 import '../widgets/add_product.dart';
 import 'product_list.dart';
 
@@ -26,6 +27,13 @@ class _MyHomeState extends State<MyHome> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Get.to(() => AddMemo());
+              },
+              icon: Icon(Icons.add_comment)),
+        ],
       ),
       body: Container(
         margin: const EdgeInsets.all(15),
