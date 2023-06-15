@@ -1,3 +1,6 @@
+//제품들의 데이터베이스
+// 연관상품코드도 추가해야 할 듯.
+
 class ProductFirebaseModel {
   String? itemNumber;
   String? category;
