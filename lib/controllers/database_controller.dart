@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:stockmanager/database/firestore_db.dart';
+import 'package:stockmanager/database/memo_firestore_db.dart';
+import 'package:stockmanager/models/memo_firebase_model.dart';
 
 import '../models/goods_firebase_model.dart';
 
@@ -25,8 +27,7 @@ class DatabaseController extends GetxController {
     await FirestoreDb.addGoods(goodsStock);
   }
 
-  addPicesGoodsStock(
-      String? goodsStock, String itemStock, String item) async {
+  addPicesGoodsStock(String? goodsStock, String itemStock, String item) async {
     await FirestoreDb.addPicesGoods(goodsStock!, itemStock, item);
   }
 
@@ -37,5 +38,13 @@ class DatabaseController extends GetxController {
   updatePicesGoodsStock(
       String? goodsStock, String itemStock, String item) async {
     await FirestoreDb.updatePicesGoods(goodsStock!, itemStock, item);
+  }
+
+  addMemo(MemoFirebaseModel memo) async {
+    await MemoFirestoreDb.addMemo(memo);
+  }
+
+  updateMemo(MemoFirebaseModel memo) async {
+    await MemoFirestoreDb.updateMemo(memo);
   }
 }

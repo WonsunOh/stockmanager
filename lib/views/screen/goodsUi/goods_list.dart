@@ -6,11 +6,10 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
-import 'package:stockmanager/views/widgets/add_memo.dart';
-import 'package:stockmanager/views/widgets/components/goods_price_calculator.dart';
+import 'package:stockmanager/views/screen/goods_price_calculator.dart';
 
-import '../widgets/add_goods.dart';
-import 'detail_view.dart';
+import 'add_goods.dart';
+import '../detail_view.dart';
 
 class GoodsList extends StatefulWidget {
   const GoodsList({Key? key}) : super(key: key);

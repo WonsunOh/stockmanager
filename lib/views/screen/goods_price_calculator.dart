@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stockmanager/controllers/stockmanager_controller.dart';
-import 'package:stockmanager/views/screen/goods_list.dart';
+import 'package:stockmanager/views/screen/goodsUi/goods_list.dart';
 
 // class GoodsPriceCalculator {
 //   @override

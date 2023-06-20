@@ -13,7 +13,6 @@ class AddGoods extends StatefulWidget {
 
 class _AddGoodsState extends State<AddGoods> {
   final _formkey = GlobalKey<FormState>();
-  final _controll = TextEditingController();
   String itemNumber = '';
   String title = '';
   String number = '';
@@ -392,26 +391,6 @@ class _AddGoodsState extends State<AddGoods> {
         ),
       ),
     );
-  }
-
-  //data보내기
-  void _sendData() {
-    FirebaseFirestore.instance.collection('datas').doc('goods').set({
-      '카테고리': _selectedValue,
-      '아이템 넘버': itemNumber,
-      '상품명': title,
-      '상품갯수': number,
-      '상품가격': price,
-      '상품무게': weight,
-      '상품재고': stock,
-      '메모': memo,
-
-      // 'image1': image1,
-      // 'image2': image2,
-      // 'image3': image3,
-      // 'image4': image4,
-      // 'image5': image5,
-    });
   }
 
   goodsTypeDropdownButton() {

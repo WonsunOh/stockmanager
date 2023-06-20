@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stockmanager/views/screen/goods_list.dart';
-import 'package:stockmanager/views/widgets/add_goods.dart';
+import 'package:stockmanager/views/screen/goodsUi/goods_list.dart';
+import 'package:stockmanager/views/screen/memoUi/mwmo_list.dart';
+import 'package:stockmanager/views/screen/goodsUi/add_goods.dart';
 
-import '../widgets/add_memo.dart';
-import '../widgets/add_product.dart';
-import 'product_list.dart';
+import 'productUi/add_product.dart';
+import 'productUi/product_list.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _MyHomeState extends State<MyHome> {
         actions: [
           IconButton(
               onPressed: () {
-                Get.to(() => AddMemo());
+                Get.to(() => MemoList());
               },
               icon: Icon(Icons.add_comment)),
         ],

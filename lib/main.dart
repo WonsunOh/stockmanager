@@ -6,9 +6,9 @@ import 'package:stockmanager/views/screen/detail_view.dart';
 
 import 'firebase_options.dart';
 import 'init_binding.dart';
-import 'views/screen/goods_list.dart';
+import 'views/screen/goodsUi/goods_list.dart';
 import 'views/screen/my_home.dart';
-import 'views/widgets/add_goods.dart';
+import 'views/screen/goodsUi/add_goods.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

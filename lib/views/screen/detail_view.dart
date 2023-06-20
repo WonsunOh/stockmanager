@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import '../../models/goods_firebase_model.dart';
 import '../widgets/goods_edit_dialog.dart';
-import '../widgets/item_input.dart';
 import 'item_indicator.dart';
 
 class DetailView extends StatefulWidget {
