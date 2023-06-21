@@ -4,10 +4,7 @@ import '../models/memo_firebase_model.dart';
 
 class MemoFirestoreDb {
   static addMemo(MemoFirebaseModel memo_model) async {
-    await FirebaseFirestore.instance
-        .collection('memoData')
-        .doc('${memo_model.id}')
-        .set({
+    await FirebaseFirestore.instance.collection('memoData').doc().set({
       'id': FieldValue.increment(1),
       'writer': memo_model.writer,
       'title': memo_model.title,
@@ -33,10 +30,7 @@ class MemoFirestoreDb {
   // }
 
   static updateMemo(MemoFirebaseModel memo_model) async {
-    await FirebaseFirestore.instance
-        .collection('memoData')
-        .doc('${memo_model.id}')
-        .update({
+    await FirebaseFirestore.instance.collection('memoData').doc().update({
       'id': memo_model.id,
       'writer': memo_model.writer,
       'title': memo_model.title,

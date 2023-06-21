@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'add_memo.dart';
-
 
 class MemoList extends StatefulWidget {
   const MemoList({Key? key}) : super(key: key);
@@ -26,8 +26,21 @@ class _MemoListState extends State<MemoList> {
           ),
         ],
       ),
-      body: Container(
-        child: Text('메모리스트'),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('memoData').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            CircularProgressIndicator();
+          }
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              return Row(
+                children: [Text(snapshot.data!.docs[index]['title'])],
+              );
+            },
+          );
+        },
       ),
     );
   }

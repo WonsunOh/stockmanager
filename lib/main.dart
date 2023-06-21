@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/views/screen/detail_view.dart';
@@ -48,6 +49,16 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/', page: () => MyHome()),
           GetPage(name: '/glist', page: () => GoodsList()),
         ],
+
+        // localization 선언
+        localizationsDelegates: const [
+          GlobalWidgetsLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        locale: Get.deviceLocale,
+        fallbackLocale: const Locale('ko', 'KR'),
+        supportedLocales: const [Locale('ko', 'KR')],
       ),
     );
   }
