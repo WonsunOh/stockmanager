@@ -45,6 +45,7 @@ dependencies:
   firebase_core:
   fluent_ui:
   date_time_picker: any
+  date_format:
 
 dependency_overrides:
   intl: any
