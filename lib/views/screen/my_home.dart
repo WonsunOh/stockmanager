@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/views/screen/goodsUi/goods_list.dart';
-import 'package:stockmanager/views/screen/memoUi/mwmo_list.dart';
+import 'package:stockmanager/views/screen/memoUi/memo_list.dart';
 import 'package:stockmanager/views/screen/goodsUi/add_goods.dart';
 
 import 'productUi/add_product.dart';

@@ -4,8 +4,9 @@ import '../models/memo_firebase_model.dart';
 
 class MemoFirestoreDb {
   static addMemo(MemoFirebaseModel memo_model) async {
+    final docIcrement = FirebaseFirestore.instance.collection('memoData').doc();
     await FirebaseFirestore.instance.collection('memoData').doc().set({
-      'id': FieldValue.increment(1),
+      'id': docIcrement.id,
       'writer': memo_model.writer,
       'title': memo_model.title,
       'inputDay': memo_model.inputDay,

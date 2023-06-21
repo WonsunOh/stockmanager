@@ -4,7 +4,7 @@ import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/controllers/memo_controller.dart';
 import 'package:stockmanager/models/memo_firebase_model.dart';
 import 'package:stockmanager/utils/utils.dart';
-import 'package:stockmanager/views/screen/memoUi/mwmo_list.dart';
+import 'package:stockmanager/views/screen/memoUi/memo_list.dart';
 import 'package:stockmanager/views/widgets/components/title_input_field.dart';
 import 'package:stockmanager/views/widgets/memo_input_field.dart';
 
@@ -62,7 +62,7 @@ class _AddMemoState extends State<AddMemo> {
                 '완료율', CompletionRateInputField(memo: widget.memo)),
             SizedBox(height: ScreenSize.sHeight * 40),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GetBuilder<MemoController>(builder: (_) {
                   return ElevatedButton(
@@ -108,49 +108,50 @@ class _AddMemoState extends State<AddMemo> {
                       }
                       _formKey.currentState?.reset();
                     },
-                    child: Text('저장'),
+                    child: Text('저장', style: Utils.titleStyle(),),
                   );
                 }),
-                widget.memo == null
-                    ? GetBuilder<MemoController>(builder: (_) {
-                        return ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState?.save();
-                              await DatabaseController.to.addMemo(widget.memo!);
-                              // await DatabaseController.to
-                              //     .addMemo(MemoFirebaseModel(
-                              //   title: _.title,
-                              //   writer: _.writer,
-                              //   inputDay: DateTime.parse(_.inputDayChange),
-                              //   category: _.category,
-                              //   content: _.contents,
-                              //   completionRate: _.completionRate,
-                              //   completionDay:
-                              //       widget.memo?.completionRate == '100'
-                              //           ? DateTime.now()
-                              //           : DateTime.parse(_.completionDay),
-                              // ));
-                            } else {
-                              Get.snackbar(
-                                '입력에러',
-                                '입력항목을 확인하세요.',
-                                duration: const Duration(seconds: 2),
-                                backgroundColor: Colors.amber,
-                                colorText: Colors.black,
-                              );
-                            }
-                            _formKey.currentState?.reset();
-                          },
-                          child: Text('계속입력'),
-                        );
-                      })
-                    : const SizedBox(width: 0),
+                SizedBox(width: ScreenSize.sWidth * 15),
+                // widget.memo == null
+                //     ? GetBuilder<MemoController>(builder: (_) {
+                //         return ElevatedButton(
+                //           onPressed: () async {
+                //             if (_formKey.currentState!.validate()) {
+                //               _formKey.currentState?.save();
+                //               await DatabaseController.to.addMemo(widget.memo!);
+                //               // await DatabaseController.to
+                //               //     .addMemo(MemoFirebaseModel(
+                //               //   title: _.title,
+                //               //   writer: _.writer,
+                //               //   inputDay: DateTime.parse(_.inputDayChange),
+                //               //   category: _.category,
+                //               //   content: _.contents,
+                //               //   completionRate: _.completionRate,
+                //               //   completionDay:
+                //               //       widget.memo?.completionRate == '100'
+                //               //           ? DateTime.now()
+                //               //           : DateTime.parse(_.completionDay),
+                //               // ));
+                //             } else {
+                //               Get.snackbar(
+                //                 '입력에러',
+                //                 '입력항목을 확인하세요.',
+                //                 duration: const Duration(seconds: 2),
+                //                 backgroundColor: Colors.amber,
+                //                 colorText: Colors.black,
+                //               );
+                //             }
+                //             _formKey.currentState?.reset();
+                //           },
+                //           child: Text('계속입력'),
+                //         );
+                //       })
+                //     : const SizedBox(width: 0),
                 ElevatedButton(
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text('나가기'),
+                  child: Text('나가기', style: Utils.titleStyle(),),
                 ),
               ],
             ),

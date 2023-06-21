@@ -25,6 +25,7 @@ class MemoController extends GetxController {
   final List<String> memoCategory = [
     '작업분류',
     '코스트고 작업',
+    '아이디어',
     '기타',
   ];
 }
