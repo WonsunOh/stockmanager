@@ -7,6 +7,7 @@ class MemoFirestoreDb {
     final docIcrement = FirebaseFirestore.instance.collection('memoData').doc();
     await FirebaseFirestore.instance.collection('memoData').doc().set({
       'id': docIcrement.id,
+      // 'id': FieldValue.increment(1),
       'writer': memo_model.writer,
       'title': memo_model.title,
       'inputDay': memo_model.inputDay,

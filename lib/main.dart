@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
-import 'package:stockmanager/views/screen/detail_view.dart';
+import 'package:stockmanager/views/screen/goodsUi/detail_view.dart';
 
 import 'firebase_options.dart';
 import 'init_binding.dart';

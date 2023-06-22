@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
-import 'package:stockmanager/views/screen/detail_view.dart';
+import 'package:stockmanager/views/screen/goodsUi/detail_view.dart';
 
 class GoodsEditDialog {
   GlobalKey<FormState> formKey1 = GlobalKey<FormState>();

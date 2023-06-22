@@ -1,5 +1,5 @@
 class MemoFirebaseModel {
-  int? id;
+  String? id;
   String? writer;
   String? title;
   DateTime? inputDay;
