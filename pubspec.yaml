@@ -46,6 +46,8 @@ dependencies:
   fluent_ui:
   date_time_picker: any
   date_format:
+  timeago:
+  intl:
 
 dependency_overrides:
   intl: any

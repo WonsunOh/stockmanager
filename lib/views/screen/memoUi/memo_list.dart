@@ -114,7 +114,7 @@ class _MemoListState extends State<MemoList> {
                                           softWrap: true,
                                         ),
                                       ),
-                                      SizedBox(height: ScreenSize.sHeight * 5),
+                                      // SizedBox(height: ScreenSize.sHeight * 5),
                                       Tooltip(
                                         message:
                                             '완성비율은 ${snapshot.data?.docs[index]['completionRate']}%',
