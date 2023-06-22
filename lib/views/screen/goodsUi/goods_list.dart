@@ -166,7 +166,7 @@ class _GoodsListState extends State<GoodsList> {
                 }
                 return Container(
                   height: double.maxFinite,
-                  width: 1000,
+                  width: 1100,
                   margin: EdgeInsets.all(10),
                   child: ListView(
                     children: [
@@ -175,6 +175,7 @@ class _GoodsListState extends State<GoodsList> {
                         children: [
                           headContainer('카테고리', 85.0),
                           headContainer('아이템넘버', 85.0),
+                          headContainer('입력일', 85.0),
                           headContainer('상품명', 150.0),
                           headContainer('상품가격(원)', 85.0),
                           headContainer('상품갯수', 85.0),
@@ -210,6 +211,11 @@ class _GoodsListState extends State<GoodsList> {
                                     bodyContainer(
                                         85,
                                         snapshot.data!.docs[index]['아이템 넘버'],
+                                        16,
+                                        index),
+                                    bodyContainer(
+                                        85,
+                                        DateFormat('yy.MM.dd').format(DateTime.parse(snapshot.data!.docs[index]['입력일'])),
                                         16,
                                         index),
                                     bodyContainer(
