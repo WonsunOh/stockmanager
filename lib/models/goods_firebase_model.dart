@@ -4,6 +4,7 @@ class GoodsFirebaseModel {
   String? itemNumber;
   String? category;
   String? title;
+  String? inputDay;
   String? number;
   String? price;
   String? weight;
@@ -14,6 +15,7 @@ class GoodsFirebaseModel {
     this.itemNumber,
     this.category,
     this.title,
+    this.inputDay,
     this.number,
     this.price,
     this.weight,
@@ -25,6 +27,7 @@ class GoodsFirebaseModel {
       itemNumber: json['itemNumber'],
       category: json['category'],
       title: json['title'],
+      inputDay: json['inputDay'],
       number: json['number'],
       price: json['price'],
       weight: json['weight'],
@@ -38,6 +41,7 @@ class GoodsFirebaseModel {
       'itemNumber': itemNumber,
       'category': category,
       'title': title,
+      'inputDay': inputDay,
       'number': number,
       'price': price,
       'weight': weight,
@@ -46,9 +50,4 @@ class GoodsFirebaseModel {
     };
   }
 
-  exchange(String itemStock) {
-    String? item;
-    item = itemStock;
-    return item;
-  }
 }

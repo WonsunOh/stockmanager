@@ -25,7 +25,7 @@ class AddMemo extends StatefulWidget {
     this.memo,
   }) : super(key: key);
 
-  final int? id;
+  final String? id;
   final MemoFirebaseModel? memo;
 
   @override

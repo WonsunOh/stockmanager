@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
 
@@ -15,6 +17,7 @@ class _AddGoodsState extends State<AddGoods> {
   final _formkey = GlobalKey<FormState>();
   String itemNumber = '';
   String title = '';
+  String inputDay = DateTime.now().toString();
   String number = '';
   String price = '';
   String weight = '';
@@ -150,6 +153,35 @@ class _AddGoodsState extends State<AddGoods> {
                   ),
                 ),
                 // textFormOutline('상품가격', price),
+
+                //입력일
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.add_circle),
+                      const SizedBox(width: 10),
+                      SizedBox(
+                        width: 80,
+                        child: Text(
+                          '입력일',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(right: 10),
+                          child: Text(inputDay.toString()),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                    ],
+                  ),
+                ),
                 //상품가격
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -363,6 +395,7 @@ class _AddGoodsState extends State<AddGoods> {
                             category: _selectedValue,
                             itemNumber: itemNumber,
                             title: title,
+                            inputDay: inputDay.toString(),
                             number: number,
                             price: price,
                             weight: weight,

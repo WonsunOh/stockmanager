@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
 import 'package:stockmanager/views/screen/goodsUi/detail_view.dart';
+import 'package:stockmanager/views/screen/goodsUi/goods_list.dart';
 
 class GoodsEditDialog {
   GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
@@ -13,6 +14,7 @@ class GoodsEditDialog {
 
   @override
   GoodsEditDialog({this.tlt, this.content, this.doc}) {
+
     Get.dialog(
       AlertDialog(
         title: Text('$tlt 수정'),
@@ -74,7 +76,7 @@ class GoodsEditDialog {
                     //model에 저장하는 방식
                     DatabaseController.to
                         .updatePicesGoodsStock(doc, tlt!, content!);
-                    Get.toNamed('/');
+                    Get.to(()=>GoodsList());
                   },
                   child: Text('수정'),
                 ),

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import '../../../models/goods_firebase_model.dart';
 import '../../widgets/goods_edit_dialog.dart';
-import '../item_indicator.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class DetailView extends StatefulWidget {
   final int index;
@@ -49,6 +49,12 @@ class _DetailViewState extends State<DetailView> {
                     datail_body(
                       '상품명',
                       snapshot.data['상품명'],
+                      snapshot.data['아이템 넘버'],
+                    ),
+                    datail_body(
+                      '입력일',
+                      // timeago.format(DateTime.tryParse(snapshot.data['입력일'].toDate().toString())!),
+                      snapshot.data['입력일'],
                       snapshot.data['아이템 넘버'],
                     ),
                     SizedBox(height: 10),
