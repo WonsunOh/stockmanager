@@ -14,7 +14,7 @@ class Utils {
         children: [
           const SizedBox(width: 10),
           SizedBox(
-            width: ScreenSize.sWidth * 30,
+            width: ScreenSize.sWidth * 50,
             child: Text(
               title,
               style: titleStyle(),
@@ -23,8 +23,8 @@ class Utils {
           Container(
             padding: EdgeInsets.only(left: ScreenSize.sWidth * 10),
             margin: EdgeInsets.only(left: ScreenSize.sWidth * 5),
-            height: ScreenSize.sHeight * 40,
-            width: ScreenSize.width * 0.85,
+            height: ScreenSize.sHeight * 60,
+            width: ScreenSize.width * 0.75,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(width: 1, color: Colors.grey),
@@ -46,7 +46,7 @@ class Utils {
         children: [
           const SizedBox(width: 10),
           SizedBox(
-            width: ScreenSize.sWidth * 30,
+            width: ScreenSize.sWidth * 50,
             child: Text(
               title,
               style: titleStyle(),
@@ -56,8 +56,8 @@ class Utils {
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: ScreenSize.sWidth * 10),
             margin: EdgeInsets.only(left: ScreenSize.sWidth * 5),
-            height: ScreenSize.sHeight * 40,
-            width: ScreenSize.width * 0.40,
+            height: ScreenSize.sHeight * 60,
+            width: ScreenSize.width * 0.50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
@@ -82,7 +82,7 @@ class Utils {
         children: [
           const SizedBox(width: 10),
           SizedBox(
-            width: ScreenSize.sWidth * 30,
+            width: ScreenSize.sWidth * 50,
             child: Text(
               title,
               style: titleStyle(),
@@ -91,8 +91,8 @@ class Utils {
           Container(
             padding: EdgeInsets.only(left: ScreenSize.sWidth * 10),
             margin: EdgeInsets.only(left: ScreenSize.sWidth * 5),
-            height: ScreenSize.sHeight * 140,
-            width: ScreenSize.width * 0.85,
+            height: ScreenSize.sHeight * 160,
+            width: ScreenSize.width * 0.75,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(width: 1, color: Colors.grey),
@@ -107,7 +107,7 @@ class Utils {
   static titleStyle() {
     return TextStyle(
       fontWeight: FontWeight.bold,
-      fontSize: ScreenSize.sWidth * 10,
+      fontSize: ScreenSize.sWidth * 12,
     );
   }
 }

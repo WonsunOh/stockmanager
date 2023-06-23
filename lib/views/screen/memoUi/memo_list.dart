@@ -18,7 +18,15 @@ class _MemoListState extends State<MemoList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text('메모'),
+        leading: IconButton(
+          onPressed: (){
+            Get.back();
+          },
+          icon: Icon(Icons.home),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -43,7 +51,7 @@ class _MemoListState extends State<MemoList> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      MemoDetail();
+                      Get.to(()=>MemoDetail(index: index,));
                     },
                     child: Container(
                       margin: EdgeInsets.symmetric(
@@ -70,7 +78,7 @@ class _MemoListState extends State<MemoList> {
                                         child: Text(
                                           snapshot.data?.docs[index]['title'],
                                           style: TextStyle(
-                                            fontSize: ScreenSize.sWidth * 12,
+                                            fontSize: ScreenSize.sWidth * 18,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.redAccent,
                                           ),
@@ -106,7 +114,7 @@ class _MemoListState extends State<MemoList> {
                                         child: Text(
                                           snapshot.data?.docs[index]['content'],
                                           style: TextStyle(
-                                            fontSize: ScreenSize.sWidth * 9,
+                                            fontSize: ScreenSize.sWidth * 12,
                                             color: Colors.redAccent,
                                           ),
                                           maxLines: 2,
@@ -163,7 +171,7 @@ class _MemoListState extends State<MemoList> {
                                 child: Text(
                                   snapshot.data!.docs[index]['category'],
                                   style: TextStyle(
-                                    fontSize: ScreenSize.sWidth * 10,
+                                    fontSize: ScreenSize.sWidth * 12,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.redAccent,
                                   ),

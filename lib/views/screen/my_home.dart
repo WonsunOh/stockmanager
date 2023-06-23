@@ -20,6 +20,7 @@ class _MyHomeState extends State<MyHome> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text(
           '코스트고 재고관리 1.0',
           style: TextStyle(

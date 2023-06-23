@@ -98,6 +98,8 @@ class _GoodsListState extends State<GoodsList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
           title: Row(
             children: [
               DropdownButton(
@@ -117,6 +119,12 @@ class _GoodsListState extends State<GoodsList> {
                   }),
               // Text('${goodData.count}'),
             ],
+          ),
+          leading: IconButton(
+            onPressed: (){
+              Get.back();
+            },
+            icon: Icon(Icons.home),
           ),
           actions: [
 

@@ -40,6 +40,7 @@ class _AddMemoState extends State<AddMemo> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: Text(
           widget.id == null ? '메모 입력' : '메모 편집',
           style: TextStyle(
@@ -80,14 +81,14 @@ class _AddMemoState extends State<AddMemo> {
                             content: widget.memo?.content,
                             completionRate: widget.memo?.completionRate,
                             completionDay: widget.memo?.completionRate == '100'
-                                ? DateTime.now()
-                                : DateTime.parse(_.completionDay),
+                                ? DateTime.now().toString()
+                                : _.completionDay,
                           ));
                         } else {
                           await DatabaseController.to.addMemo(MemoFirebaseModel(
                             title: _.title,
                             writer: _.writer,
-                            inputDay: DateTime.parse(_.inputDayChange),
+                            inputDay: _.inputDayChange,
                             category: _.category,
                             content: _.contents,
                             completionRate: _.completionRate,

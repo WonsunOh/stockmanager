@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
           // GetPage(name: '/', page: () => AddGoods()),
           GetPage(name: '/', page: () => MyHome()),
           GetPage(name: '/glist', page: () => GoodsList()),
+
         ],
 
         // localization 선언

@@ -47,6 +47,8 @@ class _AddGoodsState extends State<AddGoods> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text('상품추가'),
       ),
       body: SingleChildScrollView(

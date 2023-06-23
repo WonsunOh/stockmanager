@@ -61,7 +61,7 @@ class FirestoreDb {
     });
   }
 
-  static updatePicesGoods(
+  static updatePiecesGoods(
       String itmNumber, String fieldName, String data) async {
     await FirebaseFirestore.instance
         .collection('goodsData')

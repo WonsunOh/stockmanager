@@ -2,8 +2,8 @@ class MemoFirebaseModel {
   String? id;
   String? writer;
   String? title;
-  DateTime? inputDay;
-  DateTime? completionDay;
+  String? inputDay;
+  String? completionDay;
   String? completionRate;
   String? category;
   String? content;

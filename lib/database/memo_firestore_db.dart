@@ -43,4 +43,14 @@ class MemoFirestoreDb {
       'content': memo_model.content,
     });
   }
+
+  static updatePiecesMemo(
+      String fieldName, String data, String doc) async {
+    await FirebaseFirestore.instance
+        .collection('goodsData')
+        .doc('${doc}')
+        .update({
+      fieldName: data,
+    });
+  }
 }

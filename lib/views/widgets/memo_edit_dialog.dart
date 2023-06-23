@@ -6,14 +6,14 @@ import 'package:stockmanager/models/goods_firebase_model.dart';
 import 'package:stockmanager/views/screen/goodsUi/detail_view.dart';
 import 'package:stockmanager/views/screen/goodsUi/goods_list.dart';
 
-class GoodsEditDialog {
+class MemoEditDialog {
   GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
   String? tlt;
   String? content;
   String? doc;
 
   @override
-  GoodsEditDialog({this.tlt, this.content, this.doc}) {
+  MemoEditDialog({this.tlt, this.content, this.doc}) {
 
     Get.dialog(
       AlertDialog(
@@ -78,12 +78,12 @@ class GoodsEditDialog {
                     //model에 저장하는 방식
                     if(tlt != '입력일') {
                       DatabaseController.to
-                          .updatePiecesGoodsStock(doc, tlt!, content!);
+                          .updatePiecesMemo(tlt!, content!, doc!);
                       DatabaseController.to
-                          .updatePiecesGoodsStock(doc, '입력일', DateTime.now().toString());
+                          .updatePiecesMemo('입력일', DateTime.now().toString(), doc!);
                     } else {
                       DatabaseController.to
-                          .updatePiecesGoodsStock(doc, '입력일', DateTime.now().toString());
+                          .updatePiecesMemo('입력일', DateTime.now().toString(), doc!);
                     }
 
 

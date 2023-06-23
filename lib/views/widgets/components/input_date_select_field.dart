@@ -41,7 +41,7 @@ class InputDateSelectField extends GetView<MemoController> {
 
               onChanged: (value) {
                 memo != null
-                    ? memo?.inputDay = DateTime.parse(value)
+                    ? memo?.inputDay = value
                     : _.inputDayChange = value;
                 _.update();
               },

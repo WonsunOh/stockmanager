@@ -35,9 +35,9 @@ class DatabaseController extends GetxController {
     await FirestoreDb.updateGoods(goodsStock);
   }
 
-  updatePicesGoodsStock(
+  updatePiecesGoodsStock(
       String? goodsStock, String itemStock, String item) async {
-    await FirestoreDb.updatePicesGoods(goodsStock!, itemStock, item);
+    await FirestoreDb.updatePiecesGoods(goodsStock!, itemStock, item);
   }
 
   addMemo(MemoFirebaseModel memo) async {
@@ -46,5 +46,10 @@ class DatabaseController extends GetxController {
 
   updateMemo(MemoFirebaseModel memo) async {
     await MemoFirestoreDb.updateMemo(memo);
+  }
+
+  updatePiecesMemo(
+      String memoItem, String item, String doc) async {
+    await MemoFirestoreDb.updatePiecesMemo(memoItem, item, doc);
   }
 }
