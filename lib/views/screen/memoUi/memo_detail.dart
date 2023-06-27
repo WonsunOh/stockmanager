@@ -64,66 +64,26 @@ class _MemoDetailState extends State<MemoDetail> {
                     '완료율',
                     doc[widget.index]['completionRate'],
                   ),
-                  // _detail_body('내용', snapshot.data.docs[widget.index]['content']),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  _detail_body(
+                      '내용', snapshot.data.docs[widget.index]['content']),
+                  SizedBox(height: ScreenSize.sHeight * 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: ScreenSize.sWidth * 10,
-                            top: ScreenSize.sHeight * 10),
-                        child: Text(
-                          '내용',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            MemoEditDialog(
-                              tlt: '내용',
-                              content: doc[widget.index]['content'],
-                            );
-                          });
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.to(() => AddMemo(
+                                id: doc[widget.index]['id'],
+                              ));
                         },
-                        child: Container(
-                          width: double.maxFinite,
-                          height: ScreenSize.sHeight * 160,
-                          margin: EdgeInsets.symmetric(
-                              vertical: ScreenSize.sHeight * 10,
-                              horizontal: ScreenSize.sWidth * 10),
-                          padding: EdgeInsets.all(ScreenSize.sHeight * 10),
-                          decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Text(
-                            doc[widget.index]['content'],
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
+                        child: Text('편집'),
                       ),
-                      SizedBox(height: ScreenSize.sHeight * 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Get.to(() => AddMemo(
-                                    id: doc[widget.index]['id'],
-                                  ));
-                            },
-                            child: Text('편집'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: Text('나가기'),
-                          ),
-                        ],
-                      )
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text('나가기'),
+                      ),
                     ],
                   )
                 ],
@@ -144,19 +104,45 @@ class _MemoDetailState extends State<MemoDetail> {
         margin: EdgeInsets.symmetric(
             vertical: ScreenSize.sHeight * 10,
             horizontal: ScreenSize.sWidth * 10),
-        child: Row(
-          children: [
-            Text(
-              '$titl :',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(width: 10),
-            Text(
-              titl != '완료율' ? content : '$content %',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
+        child: titl != '내용'
+            ? Row(
+                children: [
+                  Text(
+                    '$titl :',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    titl != '완료율' ? content : '$content %',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  )
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '내용',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 10),
+                  Container(
+                    width: double.maxFinite,
+                    height: ScreenSize.sHeight * 160,
+                    margin: EdgeInsets.symmetric(
+                      vertical: ScreenSize.sHeight * 10,
+                    ),
+                    padding: EdgeInsets.all(ScreenSize.sHeight * 10),
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      content,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }
