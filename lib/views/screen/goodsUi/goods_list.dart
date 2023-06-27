@@ -121,13 +121,12 @@ class _GoodsListState extends State<GoodsList> {
             ],
           ),
           leading: IconButton(
-            onPressed: (){
-              Get.back();
+            onPressed: () {
+              Get.toNamed('/');
             },
             icon: Icon(Icons.home),
           ),
           actions: [
-
             IconButton(
                 onPressed: () {
                   // setState(() {
@@ -223,7 +222,9 @@ class _GoodsListState extends State<GoodsList> {
                                         index),
                                     bodyContainer(
                                         85,
-                                        DateFormat('yy.MM.dd').format(DateTime.parse(snapshot.data!.docs[index]['입력일'])),
+                                        DateFormat('yy.MM.dd').format(
+                                            DateTime.parse(snapshot
+                                                .data!.docs[index]['입력일'])),
                                         16,
                                         index),
                                     bodyContainer(

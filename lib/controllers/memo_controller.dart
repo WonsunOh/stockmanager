@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stockmanager/database/memo_firestore_db.dart';
+import 'package:stockmanager/models/memo_firebase_model.dart';
 
 class MemoController extends GetxController {
   static MemoController get to => Get.find();
+  RxList<MemoFirebaseModel> memoList = RxList<MemoFirebaseModel>();
 
   var title = '';
   var writer = '작성자';
@@ -10,7 +13,7 @@ class MemoController extends GetxController {
   var contents = '';
   var completionRate = '';
   String completionDay = '';
-  String inputDayChange = '';
+  String inputDay = DateTime.now().toString();
 
   GlobalKey<FormState> nameChoiceKey = GlobalKey<FormState>();
   GlobalKey<FormState> sortChoiceKey = GlobalKey<FormState>();
@@ -28,4 +31,10 @@ class MemoController extends GetxController {
     '아이디어',
     '기타',
   ];
+
+  @override
+  void onInit() {
+    memoList.bindStream(MemoFirestoreDb.MemoStream());
+    super.onInit();
+  }
 }

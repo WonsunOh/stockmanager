@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
+import 'package:stockmanager/models/memo_firebase_model.dart';
 import 'package:stockmanager/views/screen/goodsUi/detail_view.dart';
 import 'package:stockmanager/views/screen/goodsUi/goods_list.dart';
+
+import '../screen/memoUi/memo_list.dart';
 
 class MemoEditDialog {
   GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
   String? tlt;
   String? content;
-  String? doc;
+  MemoFirebaseModel? memo;
 
   @override
-  MemoEditDialog({this.tlt, this.content, this.doc}) {
-
+  MemoEditDialog({this.tlt, this.content, this.memo}) {
     Get.dialog(
       AlertDialog(
         title: Text('$tlt 수정'),
@@ -49,16 +51,16 @@ class MemoEditDialog {
                   key: formKey1,
                   child: Expanded(
                     child: tlt != '입력일'
-                    ? TextFormField(
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      onChanged: (value) {
-                        content = value;
-                      },
-                    )
-                    : Text(DateTime.now().toString()),
+                        ? TextFormField(
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onChanged: (value) {
+                              content = value;
+                            },
+                          )
+                        : Text(DateTime.now().toString()),
                   ),
                 ),
               ],
@@ -76,19 +78,18 @@ class MemoEditDialog {
                     //     .update({tlt!: content});
 
                     //model에 저장하는 방식
-                    if(tlt != '입력일') {
+                    if (tlt != '입력일') {
                       DatabaseController.to
-                          .updatePiecesMemo(tlt!, content!, doc!);
-                      DatabaseController.to
-                          .updatePiecesMemo('입력일', DateTime.now().toString(), doc!);
+                          .updatePiecesMemo(tlt!, content!, memo?.id);
+                      DatabaseController.to.updatePiecesMemo(
+                          '입력일', DateTime.now().toString(), memo?.id);
                     } else {
-                      DatabaseController.to
-                          .updatePiecesMemo('입력일', DateTime.now().toString(), doc!);
+                      DatabaseController.to.updatePiecesMemo(
+                          '입력일', DateTime.now().toString(), memo?.id);
                     }
 
-
-
-                    Get.to(()=>GoodsList());
+                    Get.to(() => MemoList());
+                    print(memo?.id);
                   },
                   child: Text('수정'),
                 ),

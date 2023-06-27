@@ -177,7 +177,7 @@ class _AddGoodsState extends State<AddGoods> {
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(right: 10),
-                          child: Text(inputDay.toString()),
+                          child: Text(inputDay),
                         ),
                       ),
                       const SizedBox(width: 10),

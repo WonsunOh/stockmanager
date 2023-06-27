@@ -88,7 +88,7 @@ class _AddMemoState extends State<AddMemo> {
                           await DatabaseController.to.addMemo(MemoFirebaseModel(
                             title: _.title,
                             writer: _.writer,
-                            inputDay: _.inputDayChange,
+                            inputDay: _.inputDay,
                             category: _.category,
                             content: _.contents,
                             completionRate: _.completionRate,
@@ -109,7 +109,10 @@ class _AddMemoState extends State<AddMemo> {
                       }
                       _formKey.currentState?.reset();
                     },
-                    child: Text('저장', style: Utils.titleStyle(),),
+                    child: Text(
+                      '저장',
+                      style: Utils.titleStyle(),
+                    ),
                   );
                 }),
                 SizedBox(width: ScreenSize.sWidth * 15),
@@ -152,7 +155,10 @@ class _AddMemoState extends State<AddMemo> {
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text('나가기', style: Utils.titleStyle(),),
+                  child: Text(
+                    '나가기',
+                    style: Utils.titleStyle(),
+                  ),
                 ),
               ],
             ),

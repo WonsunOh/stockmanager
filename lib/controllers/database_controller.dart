@@ -48,8 +48,7 @@ class DatabaseController extends GetxController {
     await MemoFirestoreDb.updateMemo(memo);
   }
 
-  updatePiecesMemo(
-      String memoItem, String item, String doc) async {
-    await MemoFirestoreDb.updatePiecesMemo(memoItem, item, doc);
+  updatePiecesMemo(String memoItem, String item, String? id) async {
+    await MemoFirestoreDb.updatePiecesMemo(memoItem, item, id!);
   }
 }

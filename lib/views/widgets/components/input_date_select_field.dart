@@ -24,31 +24,32 @@ class InputDateSelectField extends GetView<MemoController> {
           return SizedBox(
             width: ScreenSize.width * 0.3,
             // padding: EdgeInsets.only(left: 35),
-            child: DateTimePicker(
-              // controller: _.inputDateController,
-              type: DateTimePickerType.date,
-              dateMask: 'yyyy년 MM월 dd일(EEEE)',
-              initialValue: memo != null ? memo?.inputDay.toString() : '',
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              locale: const Locale('ko', 'KR'),
-              // icon: Icon(Icons.event),
-              // dateLabelText: '    날짜',
-              decoration: const InputDecoration(
-                hintText: '작성일 입력',
-                border: InputBorder.none,
-              ),
-
-              onChanged: (value) {
-                memo != null
-                    ? memo?.inputDay = value
-                    : _.inputDayChange = value;
-                _.update();
-              },
-              validator: (name) {
-                return name == null || name.isEmpty ? '클릭하여 날짜를 선택하세요..' : null;
-              },
-            ),
+            // child: DateTimePicker(
+            //   // controller: _.inputDateController,
+            //   type: DateTimePickerType.date,
+            //   dateMask: 'yyyy년 MM월 dd일(EEEE)',
+            //   initialValue: memo != null ? memo?.inputDay.toString() : '',
+            //   firstDate: DateTime(2000),
+            //   lastDate: DateTime(2100),
+            //   locale: const Locale('ko', 'KR'),
+            //   // icon: Icon(Icons.event),
+            //   // dateLabelText: '    날짜',
+            //   decoration: const InputDecoration(
+            //     hintText: '작성일 입력',
+            //     border: InputBorder.none,
+            //   ),
+            //
+            //   onChanged: (value) {
+            //     memo != null
+            //         ? memo?.inputDay = value
+            //         : _.inputDayChange = value;
+            //     _.update();
+            //   },
+            //   validator: (name) {
+            //     return name == null || name.isEmpty ? '클릭하여 날짜를 선택하세요..' : null;
+            //   },
+            // ),
+            child: Text(DateTime.now().toString()),
           );
         }),
       ],

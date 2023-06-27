@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MemoFirebaseModel {
   String? id;
   String? writer;
@@ -18,6 +20,17 @@ class MemoFirebaseModel {
     this.category,
     this.content,
   });
+
+  MemoFirebaseModel.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
+    id = documentSnapshot['id'];
+    writer = documentSnapshot['writer'];
+    title = documentSnapshot['title'];
+    inputDay = documentSnapshot['inputDay'];
+    completionDay = documentSnapshot['completionDay'];
+    completionRate = documentSnapshot['completionRate'];
+    category = documentSnapshot['category'];
+    content = documentSnapshot['content'];
+  }
 
   factory MemoFirebaseModel.fromMap(Map<dynamic, dynamic> json) {
     return MemoFirebaseModel(

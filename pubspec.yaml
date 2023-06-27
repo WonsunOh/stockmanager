@@ -48,6 +48,7 @@ dependencies:
   date_format:
   timeago:
   intl:
+  uuid:
 
 dependency_overrides:
   intl: any
