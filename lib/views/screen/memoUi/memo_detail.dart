@@ -7,11 +7,14 @@ import 'package:intl/intl.dart';
 import 'package:stockmanager/models/memo_firebase_model.dart';
 import 'package:stockmanager/utils/screen_size.dart';
 import 'package:stockmanager/views/screen/memoUi/add_memo.dart';
+import 'package:stockmanager/views/screen/memoUi/memo_list.dart';
 import 'package:stockmanager/views/widgets/memo_edit_dialog.dart';
+
+import '../../../controllers/database_controller.dart';
 
 class MemoDetail extends StatefulWidget {
   MemoDetail({this.memo, this.index, Key? key}) : super(key: key);
-  final MemoFirebaseModel? memo;
+  MemoFirebaseModel? memo;
   int? index;
 
   @override
@@ -19,7 +22,7 @@ class MemoDetail extends StatefulWidget {
 }
 
 class _MemoDetailState extends State<MemoDetail> {
-  String? docs;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,61 +38,125 @@ class _MemoDetailState extends State<MemoDetail> {
         ),
         actions: [],
       ),
-      body: FutureBuilder(
-          future: FirebaseFirestore.instance.collection('memoData').get(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            final doc = snapshot.data.docs;
-            return Container(
-              child: Column(
-                children: [
-                  _detail_body(
-                    '제목',
-                    doc[widget.index]['title'],
-                  ),
-                  _detail_body(
-                    '카테고리',
-                    doc[widget.index]['category'],
-                  ),
-                  _detail_body(
-                    '입력일',
-                    DateFormat('yy.MM.dd')
-                        .format(DateTime.parse(doc[widget.index]['inputDay'])),
-                  ),
-                  _detail_body(
-                    '완료율',
-                    doc[widget.index]['completionRate'],
-                  ),
-                  _detail_body(
-                      '내용', snapshot.data.docs[widget.index]['content']),
-                  SizedBox(height: ScreenSize.sHeight * 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Get.to(() => AddMemo(
-                                id: doc[widget.index]['id'],
-                              ));
-                        },
-                        child: Text('편집'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text('나가기'),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            );
-          }),
+      // body: FutureBuilder(
+      //     future: FirebaseFirestore.instance.collection('memoData').get(),
+      //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      //       if (!snapshot.hasData) {
+      //         return Center(
+      //           child: CircularProgressIndicator(),
+      //         );
+      //       }
+      //       return Container(
+      //         child: Column(
+      //           children: [
+      //             _detail_body(
+      //               '제목',
+      //               // doc[widget.index]['title'],
+      //               widget.memo!.title!,
+      //             ),
+      //             _detail_body(
+      //               '카테고리',
+      //               // doc[widget.index]['category'],
+      //               widget.memo!.category!,
+      //             ),
+      //             _detail_body(
+      //               '입력일',
+      //               DateFormat('yy.MM.dd')
+      //                   .format(DateTime.parse(widget.memo!.inputDay!)),
+      //             ),
+      //             _detail_body(
+      //               '완료율',
+      //               widget.memo!.completionRate!,
+      //             ),
+      //             _detail_body('내용', widget.memo!.content!),
+      //             SizedBox(height: ScreenSize.sHeight * 30),
+      //             Row(
+      //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //               children: [
+      //                 ElevatedButton(
+      //                   onPressed: () {
+      //                     Get.to(() => AddMemo(
+      //                           id: widget.memo!.id!,
+      //                         ));
+      //                   },
+      //                   child: Text('저장'),
+      //                 ),
+      //                 ElevatedButton(
+      //                   onPressed: () {
+      //                     Get.back();
+      //                   },
+      //                   child: Text('나가기'),
+      //                 ),
+      //               ],
+      //             )
+      //           ],
+      //         ),
+      //       );
+      //     }),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            _detail_body(
+              '제목',
+              widget.memo!.title!,
+            ),
+            _detail_body(
+              '카테고리',
+              widget.memo!.category!,
+            ),
+            _detail_body(
+              '입력일',
+              DateFormat('yy.MM.dd')
+                  .format(DateTime.parse(widget.memo!.inputDay!)),
+            ),
+            _detail_body(
+              '완료율',
+              widget.memo!.completionRate!,
+            ),
+            _detail_body('내용', widget.memo!.content!),
+            SizedBox(height: ScreenSize.sHeight * 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      if (widget.memo != null) {
+                        await DatabaseController.to
+                            .updateMemo(MemoFirebaseModel(
+                          id: widget.memo?.id,
+                          title: widget.memo?.title,
+                          writer: widget.memo?.writer,
+                          inputDay: widget.memo?.inputDay,
+                          category: widget.memo?.category,
+                          content: widget.memo?.content,
+                          completionRate: widget.memo?.completionRate,
+                          completionDay: widget.memo?.completionRate == '100'
+                              ? DateTime.now().toString()
+                              : '',
+                        ));
+                      }
+                    }
+                    Get.to(() => MemoList());
+                    // Get.to(() => AddMemo(
+                    //   id: widget.memo!.id!,
+                    // ));
+                  },
+                  child: Text('저장'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text('나가기'),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -112,10 +179,19 @@ class _MemoDetailState extends State<MemoDetail> {
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(width: 10),
+                  Expanded(
+                    child: TextFormField(
+                      initialValue: content,
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      onChanged: (value) {
+                        content = value;
+                      },
+                    ),
+                  ),
                   Text(
-                    titl != '완료율' ? content : '$content %',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  )
+                    titl != '완료율' ? '' : '%',
+                  ),
                 ],
               )
             : Column(
@@ -136,9 +212,14 @@ class _MemoDetailState extends State<MemoDetail> {
                     decoration: BoxDecoration(
                         border: Border.all(),
                         borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      content,
+                    child: TextFormField(
+                      initialValue: content,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       style: TextStyle(fontSize: 15),
+                      onChanged: (value) {
+                        content = value;
+                      },
                     ),
                   ),
                 ],
