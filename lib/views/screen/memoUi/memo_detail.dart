@@ -13,9 +13,9 @@ import 'package:stockmanager/views/widgets/memo_edit_dialog.dart';
 import '../../../controllers/database_controller.dart';
 
 class MemoDetail extends StatefulWidget {
-  MemoDetail({this.memo, this.index, Key? key}) : super(key: key);
-  MemoFirebaseModel? memo;
-  int? index;
+  MemoDetail({this.memo, Key? key}) : super(key: key);
+  final MemoFirebaseModel? memo;
+  // int? index;
 
   @override
   State<MemoDetail> createState() => _MemoDetailState();
