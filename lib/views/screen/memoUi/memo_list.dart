@@ -47,7 +47,6 @@ class _MemoListState extends State<MemoList> {
               return GestureDetector(
                 onTap: () {
                   Get.to(() => MemoDetail(
-                        index: index,
                         memo: MemoController.to.memoList[index],
                       ));
                 },
