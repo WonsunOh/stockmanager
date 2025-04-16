@@ -23,7 +23,7 @@ class _MyHomeState extends State<MyHome> {
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: const Text(
-          '코스트고 재고관리 1.1',
+          '코스트고 재고관리 1.2',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
