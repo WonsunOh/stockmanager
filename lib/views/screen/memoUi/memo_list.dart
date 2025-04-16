@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/controllers/memo_controller.dart';
@@ -25,14 +26,14 @@ class _MemoListState extends State<MemoList> {
           onPressed: () {
             Get.toNamed('/');
           },
-          icon: const Icon(Icons.home),
+          icon: Icon(Icons.home),
         ),
         actions: [
           IconButton(
             onPressed: () {
-              Get.to(() => const AddMemo());
+              Get.to(() => AddMemo());
             },
-            icon: const Icon(Icons.add),
+            icon: Icon(Icons.add),
           ),
         ],
       ),
@@ -58,7 +59,7 @@ class _MemoListState extends State<MemoList> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     elevation: 4.0,
-                    color: const Color(0xffb9e29b),
+                    color: Color(0xffb9e29b),
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenSize.sWidth * 10,
@@ -94,7 +95,7 @@ class _MemoListState extends State<MemoList> {
                                           color: Colors.grey,
                                           size: ScreenSize.sWidth * 15,
                                         ),
-                                        const SizedBox(width: 4),
+                                        SizedBox(width: 4),
                                         // Text(
                                         //   '${DateTime.parse(snapshot.data!.docs[index]['inputDay'].toString())}',
                                         //   style: TextStyle(
