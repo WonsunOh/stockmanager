@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         title: '재고관리',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.green,
         ),
         initialRoute: '/',
         initialBinding: InitBinding(),
