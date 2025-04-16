@@ -98,7 +98,7 @@ class MemoInputField extends GetView<MemoController> {
                       style: _titleStyle(),
                       obscureText: false,
                       autocorrect: false,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                       ),
                       controller: fieldController,

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/controllers/memo_controller.dart';
@@ -26,14 +25,14 @@ class _MemoListState extends State<MemoList> {
           onPressed: () {
             Get.toNamed('/');
           },
-          icon: Icon(Icons.home),
+          icon: const Icon(Icons.home),
         ),
         actions: [
           IconButton(
             onPressed: () {
-              Get.to(() => AddMemo());
+              Get.to(() => const AddMemo());
             },
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
           ),
         ],
       ),
@@ -47,7 +46,7 @@ class _MemoListState extends State<MemoList> {
               return GestureDetector(
                 onTap: () {
                   Get.to(() => MemoDetail(
-                        index: index,
+                        // index: index,
                         memo: MemoController.to.memoList[index],
                       ));
                 },
@@ -59,7 +58,7 @@ class _MemoListState extends State<MemoList> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     elevation: 4.0,
-                    color: Color(0xffb9e29b),
+                    color: const Color(0xffb9e29b),
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenSize.sWidth * 10,
@@ -95,7 +94,7 @@ class _MemoListState extends State<MemoList> {
                                           color: Colors.grey,
                                           size: ScreenSize.sWidth * 15,
                                         ),
-                                        SizedBox(width: 4),
+                                        const SizedBox(width: 4),
                                         // Text(
                                         //   '${DateTime.parse(snapshot.data!.docs[index]['inputDay'].toString())}',
                                         //   style: TextStyle(

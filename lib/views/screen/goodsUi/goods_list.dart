@@ -2,10 +2,10 @@ import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:stockmanager/models/goods_firebase_model.dart';
+import 'package:stockmanager/controllers/stockmanager_controller.dart';
+import 'package:stockmanager/views/screen/add_product_form.dart';
 import 'package:stockmanager/views/screen/goods_price_calculator.dart';
 
 import 'add_goods.dart';
@@ -51,23 +51,23 @@ class _GoodsListState extends State<GoodsList> {
     double tltWidth,
   ) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       alignment: Alignment.center,
       width: tltWidth,
       height: 30,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.indigo,
       ),
       child: Text(
         title,
-        style: TextStyle(color: Colors.white, fontSize: 15),
+        style: const TextStyle(color: Colors.white, fontSize: 15),
       ),
     );
   }
 
   bodyContainer(double boxWidth, String fieldName, double fntSize, int index) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       alignment: Alignment.center,
       width: boxWidth,
       height: 30,
@@ -103,18 +103,20 @@ class _GoodsListState extends State<GoodsList> {
           title: Row(
             children: [
               DropdownButton(
-                  value: currentGoodsClassify,
-                  items: goodsTypeToString.map(
-                    (value) {
+                  value: StockmanagerController.to.currentGoodsClassify.value,
+                  items: StockmanagerController.to.goodsTypeToString.map<DropdownMenuItem<String>>(
+                    (String value) {
                       return DropdownMenuItem(
                         value: value,
                         child: Text(value),
                       );
                     },
                   ).toList(),
-                  onChanged: (String? value) {
+                  onChanged: (val) {
+                    // getx상태가 아니므로 setState를 사용해 상태를 변경해야함.
+                    // StockmanagerController.to.setListSelected(val!);
                     setState(() {
-                      currentGoodsClassify = value!;
+                      StockmanagerController.to.setListSelected(val!);
                     });
                   }),
               // Text('${goodData.count}'),
@@ -124,30 +126,29 @@ class _GoodsListState extends State<GoodsList> {
             onPressed: () {
               Get.toNamed('/');
             },
-            icon: Icon(Icons.home),
+            icon: const Icon(Icons.home),
           ),
           actions: [
+
             IconButton(
                 onPressed: () {
-                  // setState(() {
-                  //   GoodsPriceCalculator();
-                  // });
-                  GoodsPriceCalculator();
+                  AddProductForm();
+                  // GoodsPriceCalculator();
                 },
-                icon: Icon(Icons.calculate)),
+                icon: const Icon(Icons.calculate)),
             IconButton(
               tooltip: '상품정보입력',
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      return AddGoods();
+                      return const AddGoods();
                     },
                   ),
                 );
                 print(MediaQuery.of(context).size);
               },
-              icon: Icon(Icons.create),
+              icon: const Icon(Icons.create),
             ),
           ],
         ),
@@ -159,22 +160,22 @@ class _GoodsListState extends State<GoodsList> {
         body: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: StreamBuilder<QuerySnapshot>(
-              stream: currentGoodsClassify == '모든카테고리'
+              stream: StockmanagerController.to.currentGoodsClassify.value == '모든카테고리'
                   ? FirebaseFirestore.instance
                       .collection('goodsData')
                       .snapshots()
                   : FirebaseFirestore.instance
                       .collection('goodsData')
-                      .where('카테고리', isEqualTo: currentGoodsClassify)
+                      .where('카테고리', isEqualTo: StockmanagerController.to.currentGoodsClassify.value)
                       .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
                 return Container(
                   height: double.maxFinite,
-                  width: 1100,
-                  margin: EdgeInsets.all(10),
+                  width: 1500,
+                  margin: const EdgeInsets.all(10),
                   child: ListView(
                     children: [
                       Text('상품갯수 : ${snapshot.data!.docs.length}'),
@@ -196,8 +197,9 @@ class _GoodsListState extends State<GoodsList> {
                         height: double.maxFinite,
                         width: double.maxFinite,
                         child: ListView.builder(
-                            primary: false,
-                            // shrinkWrap: false,
+                            // primary: false,
+                            // shrinkWrap: true,
+                            // physics: NeverScrollableScrollPhysics(),
                             // scrollDirection: Axis.vertical,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {

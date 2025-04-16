@@ -1,19 +1,17 @@
 //상세페이지를 편집화면과 같이 공유한다.
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stockmanager/models/memo_firebase_model.dart';
 import 'package:stockmanager/utils/screen_size.dart';
-import 'package:stockmanager/views/screen/memoUi/add_memo.dart';
 import 'package:stockmanager/views/screen/memoUi/memo_list.dart';
 import 'package:stockmanager/views/widgets/memo_edit_dialog.dart';
 
 import '../../../controllers/database_controller.dart';
 
 class MemoDetail extends StatefulWidget {
-  MemoDetail({this.memo, Key? key}) : super(key: key);
+  const MemoDetail({this.memo, Key? key}) : super(key: key);
   final MemoFirebaseModel? memo;
   // int? index;
 
@@ -29,14 +27,14 @@ class _MemoDetailState extends State<MemoDetail> {
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
-        title: Text('메모 상세'),
+        title: const Text('메모 상세'),
         leading: IconButton(
           onPressed: () {
             Get.back();
           },
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
         ),
-        actions: [],
+        actions: const [],
       ),
       // body: FutureBuilder(
       //     future: FirebaseFirestore.instance.collection('memoData').get(),
@@ -139,18 +137,18 @@ class _MemoDetailState extends State<MemoDetail> {
                         ));
                       }
                     }
-                    Get.to(() => MemoList());
+                    Get.to(() => const MemoList());
                     // Get.to(() => AddMemo(
                     //   id: widget.memo!.id!,
                     // ));
                   },
-                  child: Text('저장'),
+                  child: const Text('저장'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text('나가기'),
+                  child: const Text('나가기'),
                 ),
               ],
             )
@@ -176,14 +174,14 @@ class _MemoDetailState extends State<MemoDetail> {
                 children: [
                   Text(
                     '$titl :',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
                       initialValue: content,
                       style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                       onChanged: (value) {
                         content = value;
                       },
@@ -197,11 +195,11 @@ class _MemoDetailState extends State<MemoDetail> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     '내용',
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Container(
                     width: double.maxFinite,
                     height: ScreenSize.sHeight * 160,
@@ -216,7 +214,7 @@ class _MemoDetailState extends State<MemoDetail> {
                       initialValue: content,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
-                      style: TextStyle(fontSize: 15),
+                      style: const TextStyle(fontSize: 15),
                       onChanged: (value) {
                         content = value;
                       },

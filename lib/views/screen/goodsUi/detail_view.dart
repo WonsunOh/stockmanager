@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../../models/goods_firebase_model.dart';
 import '../../widgets/goods_edit_dialog.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class DetailView extends StatefulWidget {
   final int index;
   final String itemNumber;
-  DetailView({
+  const DetailView({
     Key? key,
     required this.index,
     required this.itemNumber,
@@ -26,12 +24,12 @@ class _DetailViewState extends State<DetailView> {
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
-        title: Text('상품 상세'),
+        title: const Text('상품 상세'),
         leading: IconButton(
           onPressed: (){
             Get.back();
           },
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
         ),
         actions: [
           IconButton(
@@ -39,20 +37,20 @@ class _DetailViewState extends State<DetailView> {
             onPressed: () {
               // print('$currentCollection,$index,$id');
             },
-            icon: Icon(Icons.navigate_next),
+            icon: const Icon(Icons.navigate_next),
           ),
         ],
       ),
       body: FutureBuilder<Object>(
           future: FirebaseFirestore.instance
               .collection('goodsData')
-              .doc('${widget.itemNumber}')
+              .doc(widget.itemNumber)
               .get(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return SingleChildScrollView(
                   child: Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
                     _datail_body(
@@ -67,50 +65,50 @@ class _DetailViewState extends State<DetailView> {
                       // snapshot.data['입력일'],
                       snapshot.data['아이템 넘버'],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body(
                         '카테고리', snapshot.data['카테고리'], snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body('아이템번호', snapshot.data['아이템 넘버'],
                         snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body(
                         '상품가격', snapshot.data['상품가격'], snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body(
                         '상품갯수', snapshot.data['상품갯수'], snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body(
                         '상품무게', snapshot.data['상품무게'], snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body(
                         '개당 가격',
                         (int.parse(snapshot.data['상품가격']) /
                                 int.parse(snapshot.data['상품갯수']))
                             .toStringAsFixed(1),
                         snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body(
                         '개당 무게',
                         (int.parse(snapshot.data['상품무게']) /
                                 int.parse(snapshot.data['상품갯수']))
                             .toStringAsFixed(1),
                         snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body(
                         '상품재고', snapshot.data['상품재고'], snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _datail_body(
                         '메모', snapshot.data['메모'], snapshot.data['아이템 넘버']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ));
             } else {
-              CircularProgressIndicator();
+              const CircularProgressIndicator();
             }
 
-            return Center(
+            return const Center(
               child: Text('데이터 오류'),
             );
           }),
@@ -132,12 +130,12 @@ class _DetailViewState extends State<DetailView> {
         children: [
           Text(
             titl,
-            style: TextStyle(fontSize: 25),
+            style: const TextStyle(fontSize: 25),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Text(
             content,
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
         ],
       ),

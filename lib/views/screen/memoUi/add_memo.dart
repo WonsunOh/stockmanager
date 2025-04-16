@@ -6,7 +6,6 @@ import 'package:stockmanager/models/memo_firebase_model.dart';
 import 'package:stockmanager/utils/utils.dart';
 import 'package:stockmanager/views/screen/memoUi/memo_list.dart';
 import 'package:stockmanager/views/widgets/components/title_input_field.dart';
-import 'package:stockmanager/views/widgets/memo_input_field.dart';
 
 import '../../../utils/screen_size.dart';
 import '../../widgets/components/category_dropdown_button.dart';
@@ -19,7 +18,7 @@ import '../../widgets/components/writer_dropdown_button.dart';
 // 작성한 메모를 listview로 보여줄 것.
 
 class AddMemo extends StatefulWidget {
-  AddMemo({
+  const AddMemo({
     Key? key,
     this.id,
     this.memo,
@@ -97,7 +96,7 @@ class _AddMemoState extends State<AddMemo> {
                             //     : DateTime.parse(_.completionDay),
                           ));
                         }
-                        Get.to(() => MemoList());
+                        Get.to(() => const MemoList());
                       } else {
                         Get.snackbar(
                           '입력에러',

@@ -67,23 +67,23 @@ class _AddProductState extends State<AddProduct> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  child: const Text(
                     '제품추가',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                 ),
                 //카테고리
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
-                        child: const Text(
+                        child: Text(
                           '카테고리',
                           style: TextStyle(
                             fontSize: 15,
@@ -91,19 +91,19 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       productTypeDropdownButton(),
                     ],
                   ),
                 ),
                 //상품코드
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '제품코드',
@@ -116,7 +116,7 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
                               p_itemNumber = value;
@@ -129,7 +129,7 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 10),
                       //연관상품코드 - goodsData 컬렉션에 있는 코드와 현 제품의 코드를 매치시킨다.
                       // 현 제품의 이름으로 자동완성 검색창을 띄운 후 선택하면 상품 코드가 뜨게
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '연관상품코드',
@@ -142,14 +142,14 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: StreamBuilder<QuerySnapshot>(
                             stream: goodsData.snapshots(),
                             builder: (context, snapshot) {
                               final List<DropdownMenuItem> goodsDropdownItems = [];
                               if(!snapshot.hasData){
 
-                                return CircularProgressIndicator();
+                                return const CircularProgressIndicator();
 
                                 } else {
 
@@ -164,7 +164,7 @@ class _AddProductState extends State<AddProduct> {
                                   );
                                 }
                               }
-                              String? _itemValue = snapshot.data?.docs[0].toString();
+                              String? itemValue = snapshot.data?.docs[0].toString();
 
                               return DropdownButton(
                                 value: snapshot.data?.docs[0],
@@ -187,12 +187,12 @@ class _AddProductState extends State<AddProduct> {
                 // textFormOutline('상품명', title),
                 //상품명
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '제품명',
@@ -205,7 +205,7 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
                               p_title = value;
@@ -218,12 +218,12 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 //원료갯수
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '원료의 갯수',
@@ -236,7 +236,7 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
                               p_number = value;
@@ -244,12 +244,12 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      Text('개'),
+                      const Text('개'),
                       const SizedBox(width: 10),
-                      SizedBox(width: 30),
+                      const SizedBox(width: 30),
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '개당 원가',
@@ -261,13 +261,13 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       const SizedBox(width: 20),
                       Container(
-                        margin: EdgeInsets.only(right: 10),
+                        margin: const EdgeInsets.only(right: 10),
                         width: 100,
                         // child: Text((int.parse(goodsModel!.price!) /
                         //         int.parse(goodsModel!.number!))
                         //     .toStringAsFixed(1)),
                       ),
-                      Text('원'),
+                      const Text('원'),
                       const SizedBox(width: 10),
                     ],
                   ),
@@ -275,12 +275,12 @@ class _AddProductState extends State<AddProduct> {
                 // textFormOutline('상품가격', price),
                 //상품가격
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '제품판매가격',
@@ -293,7 +293,7 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
                               p_price = value;
@@ -301,7 +301,7 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      Text('원'),
+                      const Text('원'),
                       const SizedBox(width: 10),
                     ],
                   ),
@@ -309,12 +309,12 @@ class _AddProductState extends State<AddProduct> {
 
                 //수수료율
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '수수료율',
@@ -327,7 +327,7 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
                               commissionRate = value;
@@ -335,19 +335,19 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      Text('%'),
+                      const Text('%'),
                       const SizedBox(width: 10),
                     ],
                   ),
                 ),
                 //수익률
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '수익률',
@@ -360,7 +360,7 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
                               earningRate = value;
@@ -368,7 +368,7 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      Text('%'),
+                      const Text('%'),
                       const SizedBox(width: 10),
                     ],
                   ),
@@ -376,12 +376,12 @@ class _AddProductState extends State<AddProduct> {
 
                 //상품재고
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
                         child: Text(
                           '상품재고량',
@@ -394,7 +394,7 @@ class _AddProductState extends State<AddProduct> {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
                               p_stock = value;
@@ -402,7 +402,7 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      Text('개'),
+                      const Text('개'),
                       const SizedBox(width: 10),
                     ],
                   ),
@@ -434,14 +434,14 @@ class _AddProductState extends State<AddProduct> {
                 //   ),
                 // ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
                     children: [
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
-                      SizedBox(
+                      const SizedBox(
                         width: 90,
-                        child: const Text(
+                        child: Text(
                           'memo',
                           style: TextStyle(
                             fontSize: 15,
@@ -472,7 +472,7 @@ class _AddProductState extends State<AddProduct> {
                     ],
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -503,7 +503,7 @@ class _AddProductState extends State<AddProduct> {
                         _formkey1.currentState?.reset();
                         Get.toNamed('/');
                       },
-                      child: Text('저장'),
+                      child: const Text('저장'),
                     ),
                   ],
                 )
@@ -536,7 +536,7 @@ class _AddProductState extends State<AddProduct> {
 
   textFormOutline(String titl, String val) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Row(
         children: [
           const Icon(Icons.add_circle),
@@ -545,7 +545,7 @@ class _AddProductState extends State<AddProduct> {
             width: 60,
             child: Text(
               titl,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
                 color: Colors.blueGrey,
               ),
@@ -554,7 +554,7 @@ class _AddProductState extends State<AddProduct> {
           const SizedBox(width: 20),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: 10),
+              margin: const EdgeInsets.only(right: 10),
               child: TextFormField(
                 onChanged: (value) {
                   val = value;

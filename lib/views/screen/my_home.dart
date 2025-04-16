@@ -4,6 +4,7 @@ import 'package:stockmanager/views/screen/goodsUi/goods_list.dart';
 import 'package:stockmanager/views/screen/memoUi/memo_list.dart';
 import 'package:stockmanager/views/screen/goodsUi/add_goods.dart';
 
+import 'add_product_form.dart';
 import 'productUi/add_product.dart';
 import 'productUi/product_list.dart';
 
@@ -29,11 +30,22 @@ class _MyHomeState extends State<MyHome> {
           ),
         ),
         actions: [
+
+          // 원가계산기
+          // IconButton(
+          //     onPressed: () {
+          //       // setState(() {
+          //       //   GoodsPriceCalculator();
+          //       // });
+          //       AddProductForm();
+          //     },
+          //     icon: const Icon(Icons.add_task)),
+
           IconButton(
               onPressed: () {
-                Get.to(() => MemoList());
+                Get.to(() => const MemoList());
               },
-              icon: Icon(Icons.add_comment)),
+              icon: const Icon(Icons.add_comment)),
         ],
       ),
       body: Container(
@@ -55,10 +67,10 @@ class _MyHomeState extends State<MyHome> {
                   onTap: () {
                     Get.to(() => const GoodsList());
                   },
-                  child: Card(
+                  child: const Card(
                     child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: const Text(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
                         '상품리스트',
                         style: TextStyle(
                           fontSize: 20,
@@ -72,10 +84,10 @@ class _MyHomeState extends State<MyHome> {
                   onTap: () {
                     Get.to(() => const AddGoods());
                   },
-                  child: Card(
+                  child: const Card(
                     child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: const Text(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
                         '상품추가',
                         style: TextStyle(
                           fontSize: 20,

@@ -39,7 +39,7 @@ class CompletionRateInputField extends GetView<MemoController> {
                 },
               ),
             ),
-            Text(
+            const Text(
               '%',
               style: TextStyle(fontSize: 20),
             ),

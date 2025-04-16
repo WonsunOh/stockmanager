@@ -2,14 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:stockmanager/controllers/database_controller.dart';
-import 'package:stockmanager/views/screen/goodsUi/detail_view.dart';
 
 import 'firebase_options.dart';
 import 'init_binding.dart';
 import 'views/screen/goodsUi/goods_list.dart';
 import 'views/screen/my_home.dart';
-import 'views/screen/goodsUi/add_goods.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,8 +43,8 @@ class MyApp extends StatelessWidget {
         initialBinding: InitBinding(),
         getPages: [
           // GetPage(name: '/', page: () => AddGoods()),
-          GetPage(name: '/', page: () => MyHome()),
-          GetPage(name: '/glist', page: () => GoodsList()),
+          GetPage(name: '/', page: () => const MyHome()),
+          GetPage(name: '/glist', page: () => const GoodsList()),
 
         ],
 

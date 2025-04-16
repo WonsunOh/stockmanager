@@ -36,7 +36,7 @@ class FirestoreDb {
       String itmNumber, String fieldName, String data) async {
     await FirebaseFirestore.instance
         .collection('goodsData')
-        .doc('${itmNumber}')
+        .doc(itmNumber)
         .set({
       fieldName: data,
     });
@@ -65,7 +65,7 @@ class FirestoreDb {
       String itmNumber, String fieldName, String data) async {
     await FirebaseFirestore.instance
         .collection('goodsData')
-        .doc('${itmNumber}')
+        .doc(itmNumber)
         .update({
       fieldName: data,
     });

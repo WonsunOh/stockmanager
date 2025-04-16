@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
-import 'package:stockmanager/models/goods_firebase_model.dart';
-import 'package:stockmanager/views/screen/goodsUi/detail_view.dart';
 import 'package:stockmanager/views/screen/goodsUi/goods_list.dart';
 
 class GoodsEditDialog {
@@ -25,32 +22,32 @@ class GoodsEditDialog {
               children: [
                 Text(
                   '현재 $tlt',
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Text(
                   '$content',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                 )
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Text(
                   '수정 $tlt',
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Form(
                   key: formKey1,
                   child: Expanded(
                     child: tlt != '입력일'
                     ? TextFormField(
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
@@ -63,7 +60,7 @@ class GoodsEditDialog {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -88,15 +85,15 @@ class GoodsEditDialog {
 
 
 
-                    Get.to(()=>GoodsList());
+                    Get.to(()=>const GoodsList());
                   },
-                  child: Text('수정'),
+                  child: const Text('수정'),
                 ),
                 OutlinedButton(
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text('나가기'),
+                  child: const Text('나가기'),
                 ),
               ],
             ),

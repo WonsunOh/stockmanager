@@ -16,7 +16,7 @@ class ItemIndicator extends StatelessWidget {
 
     return Scaffold(
       body: FutureBuilder<Object>(
-          future: datas.collection('$currentCollection').get(),
+          future: datas.collection(currentCollection).get(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             var itColor =
                 int.parse('0xff${snapshot.data.docs[index]['itemColor']}');
@@ -28,31 +28,23 @@ class ItemIndicator extends StatelessWidget {
 
             if (snapshot.connectionState == ConnectionState.done) {
               return Container(
-                padding: EdgeInsets.only(left: 20, top: 50, right: 20),
+                padding: const EdgeInsets.only(left: 20, top: 50, right: 20),
                 // color: Colors.deepOrange,
                 width: 1200,
                 // height: 450,
                 child: Row(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 470,
                       // color: Colors.white,
                       child: Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                               left: 20,
                             ),
                             width: 470,
-                            child: Text(
-                              '식품위생법에 의한 한글 표시사항',
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w900,
-                                  fontFamily: 'SCDream',
-                                  letterSpacing: -1.0),
-                            ),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
                                   color: Colors.deepOrange,
@@ -60,9 +52,17 @@ class ItemIndicator extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            child: const Text(
+                              '식품위생법에 의한 한글 표시사항',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'SCDream',
+                                  letterSpacing: -1.0),
+                            ),
                           ),
                           Table(
-                            columnWidths: {
+                            columnWidths: const {
                               0: FixedColumnWidth(120),
                               1: FlexColumnWidth(),
                             },
@@ -72,12 +72,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '제품명',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -86,14 +86,14 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.red,
                                     child: Text(
                                       snapshot.data.docs[index]['itemTitle'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -106,12 +106,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '식품의 유형',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -120,14 +120,14 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.red,
                                     child: Text(
                                       snapshot.data.docs[index]['goodsType'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -140,12 +140,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '수입원',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -154,7 +154,7 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
@@ -162,7 +162,7 @@ class ItemIndicator extends StatelessWidget {
                                     child: Text(
                                       snapshot.data.docs[index]
                                           ['itemIncomeAdress'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -175,12 +175,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '제조원',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -189,7 +189,7 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
@@ -197,7 +197,7 @@ class ItemIndicator extends StatelessWidget {
                                     child: Text(
                                       snapshot.data.docs[index]
                                           ['itemProductAdress'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -210,12 +210,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '원산지',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -224,14 +224,14 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.red,
                                     child: Text(
                                       snapshot.data.docs[index]['makecountry'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -244,12 +244,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '내용량',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -258,14 +258,14 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.red,
                                     child: Text(
                                       snapshot.data.docs[index]['weight'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -278,12 +278,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '유통기한',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -292,12 +292,12 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.red,
-                                    child: Text(
+                                    child: const Text(
                                       '제품포장 표기일까지(년월일순)',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -312,12 +312,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '원재료 및 \n함량',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -326,7 +326,7 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
@@ -334,7 +334,7 @@ class ItemIndicator extends StatelessWidget {
                                     child: Text(
                                       snapshot.data.docs[index]
                                           ['itemSourceName'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -347,12 +347,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '내포장재질',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -361,7 +361,7 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
@@ -369,7 +369,7 @@ class ItemIndicator extends StatelessWidget {
                                     child: Text(
                                       snapshot.data.docs[index]
                                           ['itemCoverMaterial'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -382,12 +382,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '반품 및 교환',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -396,12 +396,12 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.red,
-                                    child: Text(
+                                    child: const Text(
                                       '구입처 또는 판매원',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -416,12 +416,12 @@ class ItemIndicator extends StatelessWidget {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.yellow,
-                                    child: Text(
+                                    child: const Text(
                                       '소분업체명',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -430,12 +430,12 @@ class ItemIndicator extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 5,
                                     ),
                                     // color: Colors.red,
-                                    child: Text(
+                                    child: const Text(
                                       '코스트고(제2015-02854호) \n 경기도 의정부시 둔야로61번길 38',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -449,7 +449,7 @@ class ItemIndicator extends StatelessWidget {
                           ),
                           Text(
                             snapshot.data.docs[index]['precautions2'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.red,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -458,10 +458,10 @@ class ItemIndicator extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Container(
+                    SizedBox(
                       width: 409,
                       // color: Colors.white,
                       child: Column(
@@ -470,7 +470,7 @@ class ItemIndicator extends StatelessWidget {
                           //제목
                           Container(
                             alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                               left: 10,
                               right: 10,
                             ),
@@ -480,7 +480,7 @@ class ItemIndicator extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                const Text(
                                   '영양정보',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -495,7 +495,7 @@ class ItemIndicator extends StatelessWidget {
                                   children: [
                                     Text(
                                       '1회 제공량 ${snapshot.data.docs[index]['itemOfferWeight']}g',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'SCDream',
                                         fontWeight: FontWeight.w500,
@@ -523,22 +523,22 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 10,
                                     top: 10,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     '1회 제공량당 함량',
                                   ),
                                 ),
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 10,
                                     right: 10,
                                     top: 10,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     '1일 영양성분 기준치에 대한 비율',
                                   ),
                                 ),
@@ -561,14 +561,14 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                     right: 10,
                                   ),
                                   child: Text(
                                     '열량   ${snapshot.data.docs[index]['itemCalorie']}kcal',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -593,26 +593,26 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                   ),
                                   child: Text(
                                     '나트륨   ${snapshot.data.docs[index]['itemNatriumWeight']}mg',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
                                   ),
                                   child: Text(
                                     '${snapshot.data.docs[index]['itemNatriumPersent']}%',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -637,27 +637,27 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                     right: 10,
                                   ),
                                   child: Text(
                                     '탄수화물   ${snapshot.data.docs[index]['itemCarbohydrateWeight']}g',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
                                   ),
                                   child: Text(
                                     '${snapshot.data.docs[index]['itemCarbohydratePersent']}%',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -682,26 +682,26 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                   ),
                                   child: Text(
                                     '   당류   ${snapshot.data.docs[index]['itemSugarsWeight']}g',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
                                   ),
                                   child: Text(
                                     '${snapshot.data.docs[index]['itemSugarsPersent']}%',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -726,26 +726,26 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                   ),
                                   child: Text(
                                     '지방   ${snapshot.data.docs[index]['itemFatWeight']}g',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
                                   ),
                                   child: Text(
                                     '${snapshot.data.docs[index]['itemFatPersent']}%',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -770,26 +770,26 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                   ),
                                   child: Text(
                                     '  트랜스지방   ${snapshot.data.docs[index]['itemTransfatWeight']}g',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
                                   ),
                                   child: Text(
                                     '${snapshot.data.docs[index]['itemTransfatPersent']}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -814,27 +814,27 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                     right: 10,
                                   ),
                                   child: Text(
                                     '  포화지방   ${snapshot.data.docs[index]['itemTransfatPersent']}g',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
                                   ),
                                   child: Text(
                                     '${snapshot.data.docs[index]['itemSaturatedfatPersent']}%',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -859,26 +859,26 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                   ),
                                   child: Text(
                                     '콜레스테롤   ${snapshot.data.docs[index]['itemCholesterolWeight']}g',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
                                   ),
                                   child: Text(
                                     '${snapshot.data.docs[index]['itemCholesterolPersent']}%',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -903,27 +903,27 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 40,
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     top: 10,
                                     right: 10,
                                   ),
                                   child: Text(
                                     '단백질   ${snapshot.data.docs[index]['itemProteinWeight']}g',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     left: 20,
                                     right: 20,
                                   ),
                                   child: Text(
                                     '${snapshot.data.docs[index]['itemProteinPersent']}%',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w200,
                                     ),
@@ -932,7 +932,7 @@ class ItemIndicator extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: 450,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -940,7 +940,7 @@ class ItemIndicator extends StatelessWidget {
                               children: [
                                 Text(
                                   '-${snapshot.data.docs[index]['precautions']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     height: 2,
@@ -948,7 +948,7 @@ class ItemIndicator extends StatelessWidget {
                                 ),
                                 Text(
                                   '-보관방법 : ${snapshot.data.docs[index]['storagemethod']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     height: 2,
@@ -956,13 +956,13 @@ class ItemIndicator extends StatelessWidget {
                                 ),
                                 Text(
                                   '-${snapshot.data.docs[index]['storagemethod2']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     height: 2,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   '-불량식품 신고는 국번없이 1399',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -972,7 +972,7 @@ class ItemIndicator extends StatelessWidget {
                                 ),
                                 Text(
                                   '-소비자 상담실 : ${snapshot.data.docs[index]['itemServiceCenter']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     height: 2,
@@ -988,10 +988,10 @@ class ItemIndicator extends StatelessWidget {
                 ),
               );
             } else {
-              CircularProgressIndicator();
+              const CircularProgressIndicator();
             }
 
-            return Center(
+            return const Center(
               child: Text('데이터 오류'),
             );
           }),

@@ -4,18 +4,18 @@ import 'package:uuid/uuid.dart';
 import '../models/memo_firebase_model.dart';
 
 class MemoFirestoreDb {
-  static addMemo(MemoFirebaseModel memo_model) async {
-    var uuid = Uuid().v4();
+  static addMemo(MemoFirebaseModel memoModel) async {
+    var uuid = const Uuid().v4();
     await FirebaseFirestore.instance.collection('memoData').doc(uuid).set({
       'id': uuid,
       // 'id': FieldValue.increment(1),
-      'writer': memo_model.writer,
-      'title': memo_model.title,
-      'inputDay': memo_model.inputDay,
-      'completionDay': memo_model.completionDay,
-      'completionRate': memo_model.completionRate,
-      'category': memo_model.category,
-      'content': memo_model.content,
+      'writer': memoModel.writer,
+      'title': memoModel.title,
+      'inputDay': memoModel.inputDay,
+      'completionDay': memoModel.completionDay,
+      'completionRate': memoModel.completionRate,
+      'category': memoModel.category,
+      'content': memoModel.content,
     });
   }
 
@@ -26,26 +26,26 @@ class MemoFirestoreDb {
         .snapshots()
         .map((QuerySnapshot query) {
       List<MemoFirebaseModel> memoList = [];
-      query.docs.forEach((element) {
+      for (var element in query.docs) {
         memoList.add(MemoFirebaseModel.fromDocumentSnapshot(element));
-      });
+      }
       return memoList;
     });
   }
 
-  static updateMemo(MemoFirebaseModel memo_model) async {
+  static updateMemo(MemoFirebaseModel memoModel) async {
     await FirebaseFirestore.instance
         .collection('memoData')
-        .doc(memo_model.id)
+        .doc(memoModel.id)
         .update({
-      'id': memo_model.id,
-      'writer': memo_model.writer,
-      'title': memo_model.title,
-      'inputDay': memo_model.inputDay,
-      'completionDay': memo_model.completionDay,
-      'completionRate': memo_model.completionRate,
-      'category': memo_model.category,
-      'content': memo_model.content,
+      'id': memoModel.id,
+      'writer': memoModel.writer,
+      'title': memoModel.title,
+      'inputDay': memoModel.inputDay,
+      'completionDay': memoModel.completionDay,
+      'completionRate': memoModel.completionRate,
+      'category': memoModel.category,
+      'content': memoModel.content,
     });
   }
 
