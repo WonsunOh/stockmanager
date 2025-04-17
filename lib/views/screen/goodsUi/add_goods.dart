@@ -25,26 +25,17 @@ class _AddGoodsState extends State<AddGoods> {
   String stock = '';
   String memo = '';
 
-  final List<String> goodsTypeList = [
-    '과자',
-    '사탕',
-    '젤리',
-    '초콜릿',
-    '껌',
-    '차,음료',
-    '기타',
-  ];
+
 
   final List<String> goodsUint = ['g', 'ml'];
 
-  late String _selectedValue;
+
   late String _unitSelectValue;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _selectedValue = '과자';
     _unitSelectValue = 'g';
   }
 
@@ -400,7 +391,7 @@ class _AddGoodsState extends State<AddGoods> {
                           _formkey.currentState?.save();
                           await DatabaseController.to
                               .addGoodsStock(GoodsFirebaseModel(
-                            category: _selectedValue,
+                            category: StockmanagerController.to.categroyValue.value,
                             itemNumber: itemNumber,
                             title: title,
                             inputDay: inputDay.toString(),
@@ -443,10 +434,10 @@ class _AddGoodsState extends State<AddGoods> {
             value: category,
             child: Text(category),
           );
-      ).toList(),
-      onChanged: (String? value) {
+        }).toList(),
+      onChanged: (val) {
         setState(() {
-          _selectedValue = value!;
+          StockmanagerController.to.setCategorySelected(val!);
         });
       },
     );
@@ -454,8 +445,8 @@ class _AddGoodsState extends State<AddGoods> {
 
   unitTypeDropdownButton() {
     return DropdownButton(
-      value: _unitSelectValue,
-      items: goodsUint.map(
+      value: StockmanagerController.to.unitSelectValue.value,
+      items: StockmanagerController.to.goodsUint.map(
         (value) {
           return DropdownMenuItem(
             value: value,
@@ -465,7 +456,7 @@ class _AddGoodsState extends State<AddGoods> {
       ).toList(),
       onChanged: (String? value) {
         setState(() {
-          _unitSelectValue = value!;
+          StockmanagerController.to.setUintSelected(value!);
         });
       },
     );

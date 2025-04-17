@@ -25,6 +25,10 @@ class StockmanagerController extends GetxController {
   //good_price_calculator.dart add_product_form.dart
   final dropdownValue = '배송선택'.obs;
   final List<String> deliveryList = ['배송선택', '유료배송', '무료배송'];
+  void setSelected(String value) {
+    dropdownValue.value = value;
+  }
+
 
   final categroyValue = '선택'.obs;
   final List<String> productCategroy = ['선택',
@@ -38,6 +42,15 @@ class StockmanagerController extends GetxController {
   void setCategorySelected(String value) {
     categroyValue.value = value;
   }
+
+
+  final unitSelectValue = 'g'.obs;
+  final List<String> goodsUint = ['g', 'ml'];
+  void setUintSelected(String value) {
+    unitSelectValue.value = value;
+  }
+
+
 
   final isClick = false.obs;
 
@@ -58,9 +71,7 @@ class StockmanagerController extends GetxController {
 
 
 
-  void setSelected(String value) {
-    dropdownValue.value = value;
-  }
+
 
 
 

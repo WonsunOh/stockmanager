@@ -260,11 +260,22 @@ class AddProductForm {
                       ],
                     ),
                   const SizedBox(height: 15),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: const Text('닫기'),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text('제품추가'),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text('닫기'),
+                      ),
+                    ],
                   ),
                 ],
               ),
