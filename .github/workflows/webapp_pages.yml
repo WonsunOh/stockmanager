@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       # 1
@@ -21,20 +23,19 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.24.5
 
-      # 3
-      - name: Build web
-        run: flutter build web --base-href "/stockmanager_web/"
-
-      # 4
-      # https://github.com/marketplace/actions/github-pages-action
-      - name: Deploy to github pages
+      - name: 캐시된 빌드, Pub 초기화
+        run: flutter clean
+      - name: Pub 새로 가져오기
+        run: flutter pub get
+      - name: 플러터 웹 빌드
+        run: flutter build web --base-href "/stockmanager/"
+      - name: Github Pages 배포
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: web
           publish_dir: ./build/web
-          publish_branch: gh-pages
 
 #      - run: git config user.name github-actions
 #      - run: git config user.email github-actions@github.com
