@@ -223,7 +223,7 @@ class _GoodsListState extends State<GoodsList> {
                                         16,
                                         index),
                                     bodyContainer(
-                                        85,
+                                        150,
                                         DateFormat('yy.MM.dd').format(
                                             DateTime.parse(snapshot
                                                 .data!.docs[index]['입력일'])),

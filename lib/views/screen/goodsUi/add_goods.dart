@@ -18,7 +18,7 @@ class _AddGoodsState extends State<AddGoods> {
   String itemNumber = '';
   String title = '';
   // String inputDay = DateTime.now().toString();
-  String inputDay = DateFormat('yyyy-MM-dd \n HH:mm').format(DateTime.now());
+  String inputDay = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
   String number = '';
   String price = '';
   String weight = '';
@@ -27,16 +27,13 @@ class _AddGoodsState extends State<AddGoods> {
 
 
 
-  final List<String> goodsUint = ['g', 'ml'];
 
 
-  late String _unitSelectValue;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _unitSelectValue = 'g';
   }
 
   @override
