@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
 
+import '../../../controllers/stockmanager_controller.dart';
+
 class AddGoods extends StatefulWidget {
   const AddGoods({Key? key}) : super(key: key);
 
@@ -434,14 +436,13 @@ class _AddGoodsState extends State<AddGoods> {
 
   goodsTypeDropdownButton() {
     return DropdownButton(
-      value: _selectedValue,
-      items: goodsTypeList.map(
-        (value) {
+        value: StockmanagerController.to.categroyValue.value,
+        items: StockmanagerController.to.productCategroy
+            .map<DropdownMenuItem<String>>((String category) {
           return DropdownMenuItem(
-            value: value,
-            child: Text(value),
+            value: category,
+            child: Text(category),
           );
-        },
       ).toList(),
       onChanged: (String? value) {
         setState(() {
