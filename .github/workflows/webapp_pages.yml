@@ -1,24 +1,43 @@
-name: Build and deploy flutter web app
+name: deploy flutter web to github pages
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
+
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'master'
-      - run: flutter pub get
-      - run: flutter config --enable-web
-      - run: flutter build web --base-href "/stockmanager_web/"
+      # 1
+      # https://github.com/marketplace/actions/checkout
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - run: git config user.name github-actions
-      - run: git config user.email github-actions@github.com
-      - run: git --work-tree build/web add --all
-      - run: git commit -m "Automatic deployment by github-actions"
-      - run: git push origin HEAD:gh_pages --force
+      # 2
+      # https://github.com/marketplace/actions/flutter-action
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.24.5
+
+      # 3
+      - name: Build web
+        run: flutter build web --base-href "/stockmanager_web/"
+
+      # 4
+      # https://github.com/marketplace/actions/github-pages-action
+      - name: Deploy to github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN}}
+          publish_dir: ./build/web
+          publish_branch: gh-pages
+
+#      - run: git config user.name github-actions
+#      - run: git config user.email github-actions@github.com
+#      - run: git --work-tree build/web add --all
+#      - run: git commit -m "Automatic deployment by github-actions"
+#      - run: git push origin HEAD:gh_pages --force
