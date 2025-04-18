@@ -8,6 +8,10 @@ import 'add_product_form.dart';
 import 'productUi/add_product.dart';
 import 'productUi/product_list.dart';
 
+
+// ver1.22
+//  상품추가 입력시 입력날짜 에러 수정 - add_good.dart 에서 inputDay 값 중 \n 제거
+
 class MyHome extends StatefulWidget {
   const MyHome({Key? key}) : super(key: key);
 
@@ -23,7 +27,7 @@ class _MyHomeState extends State<MyHome> {
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: const Text(
-          '코스트고 재고관리 1.21',
+          '코스트고 재고관리 1.22',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
