@@ -181,13 +181,13 @@ class _GoodsListState extends State<GoodsList> {
                       Text('상품갯수 : ${snapshot.data!.docs.length}'),
                       Row(
                         children: [
-                          headContainer('카테고리', 85.0),
+                          headContainer('카테고리', 90.0),
                           headContainer('아이템넘버', 85.0),
-                          headContainer('입력일', 85.0),
-                          headContainer('상품명', 150.0),
+                          headContainer('입력일', 140.0),
+                          headContainer('상품명', 160.0),
                           headContainer('상품가격(원)', 85.0),
                           headContainer('상품갯수', 85.0),
-                          headContainer('개당 가격(원)', 85.0),
+                          headContainer('개당가격(원)', 85.0),
                           headContainer('상품무게(g)', 85.0),
                           headContainer('상품재고량', 85.0),
                           headContainer('메모', 250.0),
