@@ -132,6 +132,7 @@ class _GoodsListState extends State<GoodsList> {
 
             IconButton(
                 onPressed: () {
+
                   AddProductForm();
                   // GoodsPriceCalculator();
                 },

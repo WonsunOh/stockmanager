@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
 
+import '../../../controllers/database_controller.dart';
+import '../../../controllers/stockmanager_controller.dart';
+import '../../../models/product_firebase_model.dart';
+
 class AddProduct extends StatefulWidget {
   const AddProduct({Key? key}) : super(key: key);
 
@@ -11,35 +15,33 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  final goodsData = FirebaseFirestore.instance.collection('goodsData');
-  GoodsFirebaseModel? goodsModel;
+
 
   final _formkey1 = GlobalKey<FormState>();
-  final _controll = TextEditingController();
-  String itemNumber = '';
-  String p_itemNumber = '';
-  String p_title = '';
-  String p_number = '';
-  String p_price = '';
-  String earningRate = '';
-  String commissionRate = '';
-  String p_stock = '';
-  String p_memo = '';
+  String itemNumber = '';    //연관 상품코드
+  String p_itemNumber = '';  // 제품코드
+  String p_title = '';  // 제품명
+  String p_number = '';  // 원료의 갯수
+  String p_price = '';  //제품 판매가격
+  String earningRate = '';  //수익률
+  String commissionRate = '';  //수수료율
+  String p_stock = '';  // 제품 재고량
+  String p_memo = '';  //메모
 
-  final List<String> goodsTypeList = [
-    '과자',
-    '사탕',
-    '젤리',
-    '초콜릿',
-    '껌',
-    '차,음료',
-    '기타',
-  ];
-
+  // final List<String> goodsTypeList = [
+  //   '과자',
+  //   '사탕',
+  //   '젤리',
+  //   '초콜릿',
+  //   '껌',
+  //   '차,음료',
+  //   '기타',
+  // ];
 
 
 
-  late String _selectedValue;
+
+  // late String _selectedValue;
 
 
 
@@ -47,7 +49,7 @@ class _AddProductState extends State<AddProduct> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _selectedValue = '과자';
+    // _selectedValue = '과자';
   }
 
 
@@ -140,44 +142,54 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
                       const SizedBox(width: 20),
+                      // Expanded(
+                      //   child: Container(
+                      //     margin: const EdgeInsets.only(right: 10),
+                      //     child: StreamBuilder<QuerySnapshot>(
+                      //       stream: goodsData.snapshots(),
+                      //       builder: (context, snapshot) {
+                      //         final List<DropdownMenuItem> goodsDropdownItems = [];
+                      //         if(!snapshot.hasData){
+                      //
+                      //           return const CircularProgressIndicator();
+                      //
+                      //           } else {
+                      //
+                      //           final items = snapshot.data?.docs;
+                      //           for (int i=0; i<items!.length; i++) {
+                      //             var snap = snapshot.data?.docs[i];
+                      //             goodsDropdownItems.add(
+                      //               DropdownMenuItem(
+                      //                 value: snap,
+                      //                 child: Text('$snap'),
+                      //               ),
+                      //             );
+                      //           }
+                      //         }
+                      //         String? itemValue = snapshot.data?.docs[0].toString();
+                      //
+                      //         return DropdownButton(
+                      //           value: snapshot.data?.docs[0],
+                      //           items: goodsDropdownItems,
+                      //           onChanged: (value) {
+                      //             // setState(() {
+                      //             //   _itemValue = value;
+                      //             // });
+                      //
+                      //           },
+                      //         );
+                      //       }
+                      //     )
+                      //   ),
+                      // ),
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(right: 10),
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: goodsData.snapshots(),
-                            builder: (context, snapshot) {
-                              final List<DropdownMenuItem> goodsDropdownItems = [];
-                              if(!snapshot.hasData){
-
-                                return const CircularProgressIndicator();
-
-                                } else {
-
-                                final items = snapshot.data?.docs;
-                                for (int i=0; i<items!.length; i++) {
-                                  var snap = snapshot.data?.docs[i];
-                                  goodsDropdownItems.add(
-                                    DropdownMenuItem(
-                                      value: snap,
-                                      child: Text('$snap'),
-                                    ),
-                                  );
-                                }
-                              }
-                              String? itemValue = snapshot.data?.docs[0].toString();
-
-                              return DropdownButton(
-                                value: snapshot.data?.docs[0],
-                                items: goodsDropdownItems,
-                                onChanged: (value) {
-                                  // setState(() {
-                                  //   _itemValue = value;
-                                  // });
-
-                                },
-                              );
-                            }
-                          )
+                          child: TextFormField(
+                            onChanged: (value) {
+                              itemNumber = value;
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -480,17 +492,17 @@ class _AddProductState extends State<AddProduct> {
                       onPressed: () async {
                         if (_formkey1.currentState!.validate()) {
                           _formkey1.currentState?.save();
-                          // await DatabaseController.to
-                          //     .addGoodsStock(GoodsFirebaseModel(
-                          //   category: _selectedValue,
-                          //   itemNumber: itemNumber,
-                          //   title: title,
-                          //   number: number,
-                          //   price: price,
-                          //   weight: weight,
-                          //   stock: stock,
-                          //   memo: memo,
-                          // ));
+                          await DatabaseController.to
+                              .addProductStock(ProductFirebaseModel(
+                            // category: _selectedValue,
+                            itemNumber: itemNumber,
+                            title: p_title,
+                            number: p_number,
+                            price: p_price,
+                            // weight: p_weight,
+                            stock: p_stock,
+                            memo: p_memo,
+                          ));
                         } else {
                           Get.snackbar(
                             '입력에러',
@@ -517,18 +529,17 @@ class _AddProductState extends State<AddProduct> {
 
   productTypeDropdownButton() {
     return DropdownButton(
-      value: _selectedValue,
-      items: goodsTypeList.map(
-        (value) {
-          return DropdownMenuItem(
-            value: value,
-            child: Text(value),
-          );
-        },
-      ).toList(),
-      onChanged: (String? value) {
+      value: StockmanagerController.to.categroyValue.value,
+      items: StockmanagerController.to.productCategroy
+          .map<DropdownMenuItem<String>>((String category) {
+        return DropdownMenuItem(
+          value: category,
+          child: Text(category),
+        );
+      }).toList(),
+      onChanged: (val) {
         setState(() {
-          _selectedValue = value!;
+          StockmanagerController.to.setCategorySelected(val!);
         });
       },
     );

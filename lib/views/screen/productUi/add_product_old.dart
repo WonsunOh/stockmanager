@@ -1,33 +1,47 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:stockmanager/controllers/database_controller.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
 
 import '../../../controllers/stockmanager_controller.dart';
 
-class AddGoods extends StatefulWidget {
-  const AddGoods({Key? key}) : super(key: key);
+class AddProduct extends StatefulWidget {
+  const AddProduct({Key? key}) : super(key: key);
 
   @override
-  State<AddGoods> createState() => _AddGoodsState();
+  State<AddProduct> createState() => _AddProductState();
 }
 
-class _AddGoodsState extends State<AddGoods> {
+class _AddProductState extends State<AddProduct> {
+  final goodsData = FirebaseFirestore.instance.collection('goodsData');
+  GoodsFirebaseModel? goodsModel;
 
-  final _formkey = GlobalKey<FormState>();
+  final _formkey1 = GlobalKey<FormState>();
+  final _controll = TextEditingController();
   String itemNumber = '';
-  String title = '';
-  // String inputDay = DateTime.now().toString();
-  String inputDay = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
-  String number = '';
-  String price = '';
-  String weight = '';
-  String stock = '';
-  String memo = '';
+  String p_itemNumber = '';
+  String p_title = '';
+  String p_number = '';
+  String p_price = '';
+  String earningRate = '';
+  String commissionRate = '';
+  String p_stock = '';
+  String p_memo = '';
+
+  // final List<String> goodsTypeList = [
+  //   '과자',
+  //   '사탕',
+  //   '젤리',
+  //   '초콜릿',
+  //   '껌',
+  //   '차,음료',
+  //   '기타',
+  // ];
 
 
 
+
+  // late String _selectedValue;
 
 
 
@@ -35,21 +49,21 @@ class _AddGoodsState extends State<AddGoods> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // _selectedValue = '과자';
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: const Text('상품추가'),
+        title: const Text('제품추가'),
       ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.only(left: 10),
           child: Form(
-            key: _formkey,
+            key: _formkey1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,7 +71,7 @@ class _AddGoodsState extends State<AddGoods> {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.symmetric(vertical: 20),
                   child: const Text(
-                    '상품추가',
+                    '제품추가',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -70,7 +84,7 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '카테고리',
                           style: TextStyle(
@@ -80,7 +94,7 @@ class _AddGoodsState extends State<AddGoods> {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      goodsTypeDropdownButton(),
+                      productTypeDropdownButton(),
                     ],
                   ),
                 ),
@@ -92,9 +106,9 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
-                          '상품코드',
+                          '제품코드',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.blueGrey,
@@ -102,6 +116,72 @@ class _AddGoodsState extends State<AddGoods> {
                         ),
                       ),
                       const SizedBox(width: 20),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              p_itemNumber = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      const Icon(Icons.add_circle),
+                      const SizedBox(width: 10),
+                      //연관상품코드 - goodsData 컬렉션에 있는 코드와 현 제품의 코드를 매치시킨다.
+                      // 현 제품의 이름으로 자동완성 검색창을 띄운 후 선택하면 상품 코드가 뜨게
+                      const SizedBox(
+                        width: 90,
+                        child: Text(
+                          '연관상품코드',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      // Expanded(
+                      //   child: Container(
+                      //     margin: const EdgeInsets.only(right: 10),
+                      //     child: StreamBuilder<QuerySnapshot>(
+                      //       stream: goodsData.snapshots(),
+                      //       builder: (context, snapshot) {
+                      //         final List<DropdownMenuItem> goodsDropdownItems = [];
+                      //         if(!snapshot.hasData){
+                      //
+                      //           return const CircularProgressIndicator();
+                      //
+                      //           } else {
+                      //
+                      //           final items = snapshot.data?.docs;
+                      //           for (int i=0; i<items!.length; i++) {
+                      //             var snap = snapshot.data?.docs[i];
+                      //             goodsDropdownItems.add(
+                      //               DropdownMenuItem(
+                      //                 value: snap,
+                      //                 child: Text('$snap'),
+                      //               ),
+                      //             );
+                      //           }
+                      //         }
+                      //         String? itemValue = snapshot.data?.docs[0].toString();
+                      //
+                      //         return DropdownButton(
+                      //           value: snapshot.data?.docs[0],
+                      //           items: goodsDropdownItems,
+                      //           onChanged: (value) {
+                      //             // setState(() {
+                      //             //   _itemValue = value;
+                      //             // });
+                      //
+                      //           },
+                      //         );
+                      //       }
+                      //     )
+                      //   ),
+                      // ),
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(right: 10),
@@ -125,9 +205,9 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
-                          '상품명',
+                          '제품명',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.blueGrey,
@@ -140,7 +220,7 @@ class _AddGoodsState extends State<AddGoods> {
                           margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
-                              title = value;
+                              p_title = value;
                             },
                           ),
                         ),
@@ -148,9 +228,7 @@ class _AddGoodsState extends State<AddGoods> {
                     ],
                   ),
                 ),
-                // textFormOutline('상품가격', price),
-
-                //입력일
+                //원료갯수
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
@@ -158,9 +236,9 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
-                          '입력일',
+                          '원료의 갯수',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.blueGrey,
@@ -171,13 +249,42 @@ class _AddGoodsState extends State<AddGoods> {
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(right: 10),
-                          child: Text(inputDay),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              p_number = value;
+                            },
+                          ),
                         ),
                       ),
+                      const Text('개'),
+                      const SizedBox(width: 10),
+                      const SizedBox(width: 30),
+                      const Icon(Icons.add_circle),
+                      const SizedBox(width: 10),
+                      const SizedBox(
+                        width: 90,
+                        child: Text(
+                          '개당 원가',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        width: 100,
+                        // child: Text((int.parse(goodsModel!.price!) /
+                        //         int.parse(goodsModel!.number!))
+                        //     .toStringAsFixed(1)),
+                      ),
+                      const Text('원'),
                       const SizedBox(width: 10),
                     ],
                   ),
                 ),
+                // textFormOutline('상품가격', price),
                 //상품가격
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -186,9 +293,9 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
-                          '상품가격',
+                          '제품판매가격',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.blueGrey,
@@ -201,7 +308,7 @@ class _AddGoodsState extends State<AddGoods> {
                           margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
-                              price = value;
+                              p_price = value;
                             },
                           ),
                         ),
@@ -211,8 +318,8 @@ class _AddGoodsState extends State<AddGoods> {
                     ],
                   ),
                 ),
-                // textFormOutline('상품갯수', number),
-                //상품갯수
+
+                //수수료율
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
@@ -220,9 +327,9 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
-                          '상품갯수',
+                          '수수료율',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.blueGrey,
@@ -235,19 +342,17 @@ class _AddGoodsState extends State<AddGoods> {
                           margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
-                              number = value;
+                              commissionRate = value;
                             },
                           ),
                         ),
                       ),
-                      // Text('개'),
-                      unitTypeDropdownButton(),
+                      const Text('%'),
                       const SizedBox(width: 10),
                     ],
                   ),
                 ),
-                // textFormOutline('상품무게', weight),
-                //상품무게
+                //수익률
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Row(
@@ -255,9 +360,9 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
-                          '상품무게',
+                          '수익률',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.blueGrey,
@@ -270,12 +375,12 @@ class _AddGoodsState extends State<AddGoods> {
                           margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
-                              weight = value;
+                              earningRate = value;
                             },
                           ),
                         ),
                       ),
-                      const Text('g'),
+                      const Text('%'),
                       const SizedBox(width: 10),
                     ],
                   ),
@@ -289,7 +394,7 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           '상품재고량',
                           style: TextStyle(
@@ -304,7 +409,7 @@ class _AddGoodsState extends State<AddGoods> {
                           margin: const EdgeInsets.only(right: 10),
                           child: TextFormField(
                             onChanged: (value) {
-                              stock = value;
+                              p_stock = value;
                             },
                           ),
                         ),
@@ -347,7 +452,7 @@ class _AddGoodsState extends State<AddGoods> {
                       const Icon(Icons.add_circle),
                       const SizedBox(width: 10),
                       const SizedBox(
-                        width: 80,
+                        width: 90,
                         child: Text(
                           'memo',
                           style: TextStyle(
@@ -364,7 +469,7 @@ class _AddGoodsState extends State<AddGoods> {
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           onChanged: (value) {
-                            memo = value;
+                            p_memo = value;
                           },
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(
@@ -385,20 +490,19 @@ class _AddGoodsState extends State<AddGoods> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        if (_formkey.currentState!.validate()) {
-                          _formkey.currentState?.save();
-                          await DatabaseController.to
-                              .addGoodsStock(GoodsFirebaseModel(
-                            category: StockmanagerController.to.categroyValue.value,
-                            itemNumber: itemNumber,
-                            title: title,
-                            inputDay: inputDay.toString(),
-                            number: number,
-                            price: price,
-                            weight: weight,
-                            stock: stock,
-                            memo: memo,
-                          ));
+                        if (_formkey1.currentState!.validate()) {
+                          _formkey1.currentState?.save();
+                          // await DatabaseController.to
+                          //     .addGoodsStock(GoodsFirebaseModel(
+                          //   category: _selectedValue,
+                          //   itemNumber: itemNumber,
+                          //   title: title,
+                          //   number: number,
+                          //   price: price,
+                          //   weight: weight,
+                          //   stock: stock,
+                          //   memo: memo,
+                          // ));
                         } else {
                           Get.snackbar(
                             '입력에러',
@@ -408,7 +512,7 @@ class _AddGoodsState extends State<AddGoods> {
                             colorText: Colors.black,
                           );
                         }
-                        _formkey.currentState?.reset();
+                        _formkey1.currentState?.reset();
                         Get.toNamed('/');
                       },
                       child: const Text('저장'),
@@ -423,38 +527,19 @@ class _AddGoodsState extends State<AddGoods> {
     );
   }
 
-  goodsTypeDropdownButton() {
+  productTypeDropdownButton() {
     return DropdownButton(
-        value: StockmanagerController.to.categroyValue.value,
-        items: StockmanagerController.to.productCategroy
-            .map<DropdownMenuItem<String>>((String category) {
-          return DropdownMenuItem(
-            value: category,
-            child: Text(category),
-          );
-        }).toList(),
+      value: StockmanagerController.to.categroyValue.value,
+      items: StockmanagerController.to.productCategroy
+          .map<DropdownMenuItem<String>>((String category) {
+        return DropdownMenuItem(
+          value: category,
+          child: Text(category),
+        );
+      }).toList(),
       onChanged: (val) {
         setState(() {
           StockmanagerController.to.setCategorySelected(val!);
-        });
-      },
-    );
-  }
-
-  unitTypeDropdownButton() {
-    return DropdownButton(
-      value: StockmanagerController.to.unitSelectValue.value,
-      items: StockmanagerController.to.goodsUint.map(
-        (value) {
-          return DropdownMenuItem(
-            value: value,
-            child: Text(value),
-          );
-        },
-      ).toList(),
-      onChanged: (String? value) {
-        setState(() {
-          StockmanagerController.to.setUintSelected(value!);
         });
       },
     );

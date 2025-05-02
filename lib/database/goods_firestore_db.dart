@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stockmanager/models/goods_firebase_model.dart';
 
-class FirestoreDb {
+class GoodsFirestoreDb {
   static addGoods(GoodsFirebaseModel goodsmodel) async {
     await FirebaseFirestore.instance
         .collection('goodsData')

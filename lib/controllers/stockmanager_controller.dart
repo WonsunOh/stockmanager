@@ -53,23 +53,33 @@ class StockmanagerController extends GetxController {
 
 
   final isClick = false.obs;
+  final isClickCode = false.obs;
 
-  final productName = ''.obs;
-  final itemNumber = ''.obs;
-  final itemCost = ''.obs;
+  final g_itemNumber = ''.obs; //연관상품코드
+  final g_name = ''.obs; //구성 상품명
+  final g_category = ''.obs; //구성 카테고리
+  final itemCost = ''.obs;  //개당 원가
+  final itemWeight = ''.obs; //개당 무게
 
-  final productCost = ''.obs;
+
+  //제품관련 변수
+  final number = ''.obs;  // 제품갯수
+  final productName = ''.obs; //제품명
+  final category = ''.obs;  //제품 카테고리 = g_category
+  final productNumber = ''.obs; // 제품코드
+  final productCost = ''.obs;  //제품 원가
+  final productWeight = ''.obs; //제품 무게
+
+  final commissionRate = ''.obs; //수수료율
+  final earningRate = ''.obs;  //수익률
+  final sellingPrice = ''.obs;  //제품 판매가
+  final deliveryCharge = ''.obs; //배송비
+
+  final commission = ''.obs; //제품 판매수수료
+  final earning = ''.obs;  //제품 판매수익
+
 
   final costPrice = ''.obs;
-  final commissionRate = ''.obs;
-  final earningRate = ''.obs;
-  final sellingPrice = ''.obs;
-  final deliveryCharge = ''.obs;
-
-  final commission = ''.obs;
-  final earning = ''.obs;
-
-
 
 
 
