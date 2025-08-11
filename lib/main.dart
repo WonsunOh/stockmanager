@@ -1,12 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
-import 'init_binding.dart';
-import 'views/screen/goodsUi/goods_list.dart';
-import 'views/screen/my_home.dart';
+import 'presentation/views/goods/add_goods_screen.dart';
+import 'presentation/views/goods/goods_list_screen.dart';
+import 'presentation/views/home_screen.dart';
+import 'presentation/views/memo/add_memo_screen.dart';
+import 'presentation/views/memo/memo_list.dart';
+import 'presentation/views/product/add_product_screen.dart';
+import 'presentation/views/product/product_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +24,12 @@ void main() async {
     // ),
   );
 
-  runApp(const MyApp());
+  runApp(
+    // ProviderScope로 MyApp을 감싸줍니다.
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -33,20 +42,22 @@ class MyApp extends StatelessWidget {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: GetMaterialApp(
+      child: MaterialApp(
         title: '재고관리',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
         initialRoute: '/',
-        initialBinding: InitBinding(),
-        getPages: [
-          // GetPage(name: '/', page: () => AddGoods()),
-          GetPage(name: '/', page: () => const MyHome()),
-          GetPage(name: '/glist', page: () => const GoodsList()),
-
-        ],
+        routes: {
+        '/': (context) => const HomeScreen(), // 기존 MyHome을 HomeScreen으로 변경
+        '/goodsList': (context) => const GoodsListScreen(),
+        '/addGoods': (context) => const AddGoodsScreen(),
+        '/productList':(context) => const ProductListScreen(),
+        '/addProduct': (context) => const AddProductScreen(),
+        '/memoList': (context) => const MemoListScreen(),
+        '/addMemo': (context) => const AddMemoScreen(),
+      },
 
         // localization 선언
         localizationsDelegates: const [
@@ -54,8 +65,6 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        locale: Get.deviceLocale,
-        fallbackLocale: const Locale('ko', 'KR'),
         supportedLocales: const [Locale('ko', 'KR')],
       ),
     );

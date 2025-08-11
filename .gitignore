@@ -42,3 +42,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# 중첩된 저장소 폴더 무시
+WonsunOh.github.io/
+stockmanager_web/

@@ -1,537 +1,218 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:stockmanager/controllers/database_controller.dart';
-import 'package:stockmanager/controllers/stockmanager_controller.dart';
-import 'package:stockmanager/models/product_firebase_model.dart';
+import 'package:stockmanager/data/repositories/product_repository.dart'; // Product 저장을 위해 Repository 사용
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/models/product_model.dart'; // Repository를 가져오기 위해 riverpod 사용
 
-class AddProductForm {
-  final _formkey = GlobalKey<FormState>();
+// 클래스 형태가 아닌, 위젯을 보여주는 함수 형태로 변경
+void showAddProductForm(BuildContext context, WidgetRef ref) {
+  final formKey = GlobalKey<FormState>();
+  final numberFormatter = NumberFormat('###,###,###');
 
-  var numberComma = NumberFormat('###,###,###');
+  // 다이얼로그 내부에서만 사용할 상태 변수들
+  String relatedGoodsId = '';
+  bool findGoodsClicked = false;
+  
+  String productNumber = '';
+  String productName = '';
+  String numberOfPieces = '';
+  String commissionRate = '';
+  String earningRate = '';
+  String deliveryMethod = '유료배송';
+  String deliveryCharge = '0';
+  
+  Map<String, dynamic>? relatedGoodsData;
+  Map<String, String> calculationResults = {};
+  bool calculateClicked = false;
 
-  final controllVariable = StockmanagerController.to;
+  // 연관상품 불러오기
+  Future<Map<String, dynamic>> _fetchRelatedGoods(String docId) async {
+    final doc = await FirebaseFirestore.instance.collection('goodsData').doc(docId).get();
+    return doc.data()!;
+  }
 
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // 다이얼로그 내부의 상태 변경을 위해 StatefulBuilder 사용
+      return StatefulBuilder(
+        builder: (context, setState) {
+          
+          // 계산 로직
+          void calculate() {
+            if (relatedGoodsData == null) return;
 
-  AddProductForm() {
-    Get.dialog(
-      AlertDialog(
-        title: const Text('제품 생성 양식'),
-        content: Form(
-          key: _formkey,
-          child: Obx(
-            () => SizedBox(
-              width: 500,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+            final itemCost = double.parse(relatedGoodsData!['상품가격']) / double.parse(relatedGoodsData!['상품갯수']);
+            final itemWeight = double.parse(relatedGoodsData!['상품무게']) / double.parse(relatedGoodsData!['상품갯수']);
+            
+            final productCost = (itemCost * int.parse(numberOfPieces));
+            final productWeight = (itemWeight * int.parse(numberOfPieces));
+            
+            double sellingPrice;
+            final costForCalc = deliveryMethod == '무료배송' 
+                ? productCost + double.parse(deliveryCharge) 
+                : productCost;
+            
+            final denominator = 1 - (double.parse(earningRate)/100) - (double.parse(commissionRate)/100);
+            sellingPrice = costForCalc / denominator;
+            sellingPrice = (sellingPrice / 10).round() * 10.0;
 
-                  Row(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerRight,
-                        width: 60,
-                        child: const Text('연관상품코드'),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
+            final commission = (sellingPrice * (double.parse(commissionRate) / 100)).round();
+            final earning = (sellingPrice * (double.parse(earningRate) / 100)).round();
 
-                            onChanged: (val) {
-                              controllVariable.g_itemNumber.value = val;
-                            },
-                          )),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                          onPressed: (){
-                            if(_formkey.currentState!.validate()){
-                              _formkey.currentState?.save();
-                              controllVariable.isClickCode.value = true;
-                            }
-
-                      }, child: Text('입력')),
-                    ],
-                  ),
-
-                  const SizedBox(height: 15),
-                  if (controllVariable.isClickCode.value)
-            FutureBuilder(
-        future: relatedGoodsImport(controllVariable.g_itemNumber.value),
-          builder: (context, snapshot) {
-            return snapshot.hasData?
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black)
-              ),
-              child: Column(
-
-                children: [
-                  Center(
-                    child: Text('구성상품 개요',style: TextStyle(
-                      fontWeight: FontWeight.bold
-                    ),),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text('카테고리'),
-                      SizedBox(width: 10),
-                      Text(assignToVariable(controllVariable.category.value, (snapshot.data as Map)['카테고리'])),
-                      // Text((snapshot.data as Map)['카테고리']),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text('구성 상품명'),
-                      SizedBox(width: 10),
-                      Text(assignToVariable(controllVariable.g_name.value, (snapshot.data as Map)['상품명'])),
-                      // Text((snapshot.data as Map)['상품명']),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text('개당원가'),
-                      SizedBox(width: 10),
-                      Text(piecePriceCalculate((snapshot.data as Map)['상품가격'],
-                          (snapshot.data as Map)['상품갯수']) + '원'),
-                      // Text((int.parse((snapshot.data as Map)['상품가격']) /
-                      //     int.parse((snapshot.data as Map)['상품갯수']))
-                      // 
-                      //     .toStringAsFixed(1))
-                      SizedBox(width: 120),
-                      Text('개당 무게'),
-                      SizedBox(width: 10),
-                      Text(pieceWeightCalculate((snapshot.data as Map)['상품무게'],
-                          (snapshot.data as Map)['상품갯수']) + 'g'),
-                    ],
-                  ),
-
-                ],
-              ),
-            )
-
-                : Center(child: CircularProgressIndicator());
-
-
+            setState(() {
+              calculationResults = {
+                'productCost': productCost.toString(),
+                'productWeight': productWeight.toString(),
+                'sellingPrice': sellingPrice.round().toString(),
+                'commission': commission.toString(),
+                'earning': earning.toString(),
+              };
+              calculateClicked = true;
+            });
           }
 
-      ),
+          // 제품 추가 로직
+          void addProduct() async {
+            if (formKey.currentState!.validate()) {
+              formKey.currentState!.save();
+              
+              final product = ProductFirebaseModel(
+                  title: productName,
+                  itemNumber: productNumber,
+                  category: relatedGoodsData!['카테고리'],
+                  g_itemNumber: relatedGoodsId,
+                  g_title: relatedGoodsData!['상품명'],
+                  p_price: (double.parse(relatedGoodsData!['상품가격']) / double.parse(relatedGoodsData!['상품갯수'])).toStringAsFixed(1),
+                  costPrice: calculationResults['productCost'],
+                  number: numberOfPieces,
+                  weight: calculationResults['productWeight'],
+                  price: calculationResults['sellingPrice'],
+                  commission: calculationResults['commission'],
+                  earning: calculationResults['earning'],
+                  // ... 기타 필요한 필드 추가
+              );
 
-                  //제품코드
-                  Row(
+              // Riverpod을 통해 Repository 인스턴스를 가져와서 데이터 저장
+              await ref.read(productRepositoryProvider).saveProduct(product);
+              
+              Navigator.of(context).pop();
+            }
+          }
+
+          return AlertDialog(
+            title: const Text('제품 생성 양식'),
+            content: Form(
+              key: formKey,
+              child: SizedBox(
+                width: 500,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('제품코드'),
-                      const SizedBox(width: 15),
-                      Expanded(
-                          child: TextFormField(
-                            onChanged: (val) {
-                              controllVariable.productNumber.value = val;
+                      // 연관상품코드 입력
+                      Row(
+                        children: [
+                          const Text('연관상품코드'),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: TextFormField(
+                              onSaved: (val) => relatedGoodsId = val!,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              formKey.currentState!.save();
+                              setState(() {
+                                findGoodsClicked = true;
+                              });
                             },
-                          )),
-                    ],
-                  ),
-                  //제품명
-                  Row(
-                    children: [
-                      const Text('제품명'),
-                      const SizedBox(width: 15),
-                      Expanded(
-                          child: TextFormField(
-                            onChanged: (val) {
-                              controllVariable.productName.value = val;
-                            },
-                          )),
-                    ],
-                  ),
+                            child: const Text('입력'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
 
-
-
-
-
-                  Row(
-                    children: [
-
-                      const Text('제품의 갯수'),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                        
-                          onChanged: (val) {
-                            controllVariable.number.value = val;
+                      // 연관상품 정보 표시
+                      if (findGoodsClicked)
+                        FutureBuilder<Map<String, dynamic>>(
+                          future: _fetchRelatedGoods(relatedGoodsId),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+                            if (snapshot.hasError || !snapshot.hasData) {
+                              return const Text('상품을 찾을 수 없습니다.', style: TextStyle(color: Colors.red));
+                            }
+                            relatedGoodsData = snapshot.data;
+                            final costPerPiece = (double.parse(relatedGoodsData!['상품가격']) / double.parse(relatedGoodsData!['상품갯수'])).toStringAsFixed(1);
+                            final weightPerPiece = (double.parse(relatedGoodsData!['상품무게']) / double.parse(relatedGoodsData!['상품갯수'])).toStringAsFixed(1);
+                            
+                            return Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                              child: Column(
+                                children: [
+                                  Text('구성상품: ${relatedGoodsData!['상품명']}'),
+                                  Text('개당원가: $costPerPiece 원 / 개당무게: $weightPerPiece g'),
+                                ],
+                              ),
+                            );
                           },
                         ),
-                      ),
-                    ],
-                  ),
 
-
-                  //수수료율
-                  Row(
-                    children: [
-                      const Text('수수료율'),
-                      const SizedBox(width: 15),
-                      Expanded(
-                          child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp('[0-9]'))
-                        ],
-                        onChanged: (val) {
-                          controllVariable.commissionRate.value = val;
-                        },
-                      )),
-                    ],
-                  ),
-                  //수익률
-                  Row(
-                    children: [
-                      const Text('수익률'),
-                      const SizedBox(width: 15),
-                      Expanded(
-                          child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp('[0-9]'))
-                        ],
-                        onChanged: (val) {
-                          controllVariable.earningRate.value = val;
-                        },
-                      )),
-                    ],
-                  ),
-
-                  //배송방법 TextFormField
-                  Row(
-                    children: [
-                      const Text('배송방법'),
-                      const SizedBox(width: 15),
+                      // 제품 정보 입력 필드들...
+                      TextFormField(decoration: const InputDecoration(labelText: '제품코드'), onSaved: (val) => productNumber = val!),
+                      TextFormField(decoration: const InputDecoration(labelText: '제품명'), onSaved: (val) => productName = val!),
+                      TextFormField(decoration: const InputDecoration(labelText: '제품의 갯수'), keyboardType: TextInputType.number, onSaved: (val) => numberOfPieces = val!),
+                      TextFormField(decoration: const InputDecoration(labelText: '수수료율(%)'), keyboardType: TextInputType.number, onSaved: (val) => commissionRate = val!),
+                      TextFormField(decoration: const InputDecoration(labelText: '수익률(%)'), keyboardType: TextInputType.number, onSaved: (val) => earningRate = val!),
+                      
                       DropdownButton<String>(
-                        value: controllVariable.dropdownValue.value,
-                        items: controllVariable.deliveryList
-                            .map<DropdownMenuItem<String>>((String item) {
-                          return DropdownMenuItem(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                        onChanged: (val) {
-                          controllVariable.setSelected(val!);
-                        },
+                        value: deliveryMethod,
+                        items: ['유료배송', '무료배송'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                        onChanged: (val) => setState(() => deliveryMethod = val!),
                       ),
 
-                      //무료배송이면 배송비 입력란이 나오게
-                      if (controllVariable.dropdownValue == '무료배송')
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Container(
-                                alignment: Alignment.centerRight,
-                                width: 60,
-                                child: const Text('배송비'),
-                              ),
+                      if(deliveryMethod == '무료배송')
+                        TextFormField(decoration: const InputDecoration(labelText: '배송비(원)'), keyboardType: TextInputType.number, onSaved: (val) => deliveryCharge = val!),
 
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp('[0-9]'))
-                                ],
-                                onChanged: (val) {
-                                  controllVariable.deliveryCharge.value =
-                                      val;
-                                },
-                              )),
+                      const SizedBox(height: 15),
+                      ElevatedButton(onPressed: calculate, child: const Text('판매가 계산')),
+                      
+                      // 계산 결과 표시
+                      if (calculateClicked)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Column(
+                            children: [
+                                Text('제품원가: ${numberFormatter.format(double.parse(calculationResults['productCost']!))} 원'),
+                                Text('판매가: ${numberFormatter.format(double.parse(calculationResults['sellingPrice']!))} 원'),
+                                //...
                             ],
                           ),
                         ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 15),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formkey.currentState!.validate()) {
-                        _formkey.currentState?.save();
-                        controllVariable.isClick.value = true;
-                      }
-
-                      productCostCalculate(
-                          controllVariable.itemCost.value,
-                          controllVariable.number.value).toString();
-                      productWeightCalculate(controllVariable.itemWeight.value,
-                          controllVariable.number.value);
-                      sellingPriceCalculate(
-                              controllVariable.productCost.value,
-                              controllVariable.earningRate.value,
-                              controllVariable.commissionRate.value,
-                              controllVariable.deliveryCharge.value)
-                          .toString();
-                      commissionCalaulate(
-                          controllVariable.commissionRate.value).toString();
-                      earningCalaulate(
-                          controllVariable.earningRate.value).toString();
-
-
-                    },
-                    child: const Text('판매가 계산'),
-                  ),
-                  const SizedBox(height: 15),
-                  if (controllVariable.isClick.value)
-                    Column(
-                      children: [
-                        calculateResult('제품원가',
-                            numberComma.format(int.parse(
-                              controllVariable.productCost.value
-                            ))),
-                        Row(
-                          children: [
-                            Text('제품무게'),
-                            SizedBox(width: 10),
-                            Text(numberComma.format(int.parse(
-                              controllVariable.productWeight.value)) + 'g'),
-                          ],),
-                        Row(
-                          children: [
-                            Text('배송방법'),
-                            SizedBox(width: 10),
-                            Text(controllVariable.dropdownValue.value)
-                          ],
-                        ),
-                        calculateResult(
-                            '제품판매가',
-                            numberComma.format(int.parse(
-                                controllVariable.sellingPrice.value))),
-                        Row(
-                          children: [
-                            calculateResult(
-                                '수수료',
-                                numberComma.format(int.parse(
-                                    controllVariable.commission.value))),
-                            SizedBox(width: 5),
-                            Text('(' + controllVariable.commissionRate.value + '%)')
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            calculateResult(
-                                '수익',
-                                numberComma.format(int.parse(
-                                    controllVariable.earning.value))),
-                            SizedBox(width: 5),
-                            Text('(' + controllVariable.earningRate.value + '%)')
-                          ],
-                        ),
-                      ],
-                    ),
-                  const SizedBox(height: 15),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          if(_formkey.currentState!.validate()) {
-                            _formkey.currentState?.save();
-                            await DatabaseController.to
-                                .addProductStock(ProductFirebaseModel(
-                              title: controllVariable.productName.value,  //제품명
-                              itemNumber: controllVariable.productNumber.value, //제품 코드
-                              category: controllVariable.category.value,  //카테고리
-                              g_itemNumber: controllVariable.g_itemNumber.value,  //연관상품코드
-                              g_title: controllVariable.g_name.value, //구성 상품명
-                              p_price: controllVariable.itemCost.value, //개당 원가
-                              costPrice: controllVariable.productCost.value, //제품 원가
-                              number: controllVariable.number.value, //제품의 갯수
-                              weight: controllVariable.productWeight.value //제품 무게
-
-
-                            ));
-                          }
-
-
-                        },
-                        child: const Text('제품추가'),
-                      ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          Get.back();
-
-                        },
-                        child: const Text('닫기'),
+                      
+                      const SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(onPressed: addProduct, child: const Text('제품추가')),
+                          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('닫기')),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-
-  //연관상품 불러오기
-  relatedGoodsImport(String docData) async {
-    var itemData = await FirebaseFirestore.instance.collection('goodsData')
-        .doc(docData)
-        .get();
-    return itemData.data();
-  }
-
-  //개당 계산기
-  piecePerCalculate(String cost, String goodsCount, var value ) {
-    value = (int.parse(cost) /
-        int.parse(goodsCount))
-        .toStringAsFixed(1);
-    return value;
-  }
-  //개당 가격 계산기
-  piecePriceCalculate(String cost, String goodsCount ) {
-    controllVariable.itemCost.value = (int.parse(cost) /
-        int.parse(goodsCount))
-        .toStringAsFixed(1);
-    return controllVariable.itemCost.value;
-  }
-
-  pieceWeightCalculate(String weight, String goodsCount) {
-    controllVariable.itemWeight.value = (int.parse(weight) /
-        int.parse(goodsCount))
-        .toStringAsFixed(1);
-    return controllVariable.itemWeight.value;
-  }
-
-
-  //제품 원가 계산기
-  productCostCalculate(String itemCost, String itemNumber) {
-    controllVariable.productCost.value = ((double.parse(itemCost) *
-        int.parse(itemNumber)).round()).toString();
-    return controllVariable.productCost.value;
-
-  }
-
-  //제품무게 계산기
-  productWeightCalculate (String item, String number) {
-    controllVariable.productWeight.value = (double.parse(item) *
-        int.parse(number)).toString();
-    return controllVariable.productWeight.value;
-  }
-
-  //불러온 결과 변수에 할당하기
-  assignToVariable (String variable, String input) {
-    variable = input;
-    return variable;
-  }
-
-
-
-  //판매가 계산기
-  sellingPriceCalculate(String costPrice, String earningRate,
-      String commissionRate, String deliveryCharge) {
-    if (controllVariable.dropdownValue.value == '유료배송') {
-      controllVariable.sellingPrice.value = ((((int.parse(costPrice) /
-                          (1 -
-                              int.parse(earningRate) / 100 -
-                              int.parse(commissionRate) / 100)) /
-                      10)
-                  .round()) *
-              10)
-          .toString();
-    } else if (controllVariable.dropdownValue.value == '무료배송') {
-      controllVariable.sellingPrice.value =
-          (((((int.parse(costPrice) + int.parse(deliveryCharge)) /
-                              (1 -
-                                  int.parse(earningRate) / 100 -
-                                  int.parse(commissionRate) / 100)) /
-                          10)
-                      .round()) *
-                  10)
-              .toString();
-    }
-    return controllVariable.sellingPrice.value;
-  }
-
-  //수수료 계산기
-  commissionCalaulate(String commissionRate) {
-    controllVariable.commission.value =
-        ((((int.parse(controllVariable.sellingPrice.value) *
-                            (int.parse(commissionRate) / 100)) /
-                        10)
-                    .round()) *
-                10)
-            .toString();
-    return controllVariable.commission.value;
-  }
-
-  //수익 계산기
-  earningCalaulate(String earningRate) {
-    controllVariable.earning.value =
-        ((((int.parse(controllVariable.sellingPrice.value) *
-                            (int.parse(earningRate) / 100)) /
-                        10)
-                    .round()) *
-                10)
-            .toString();
-    return controllVariable.earning.value;
-  }
-
-  Widget calculateResult(String title, String result) {
-    return Row(
-      children: [
-        Text(title),
-        const SizedBox(width: 15),
-        Text('$result 원'),
-      ],
-    );
-  }
+          );
+        },
+      );
+    },
+  );
 }
-
-// class DeliveryDropdownButton extends StatefulWidget {
-//   const DeliveryDropdownButton({Key? key}) : super(key: key);
-//
-//   @override
-//   State<DeliveryDropdownButton> createState() => _DeliveryDropdownButtonState();
-// }
-//
-// class _DeliveryDropdownButtonState extends State<DeliveryDropdownButton> {
-//   final List<String> DeliveryList = ['배송선택', '유료배송', '무료배송'];
-//   String? dropdownValue = '배송선택';
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Row(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Text('배송방법'),
-//           SizedBox(width: 15),
-//           Expanded(
-//             child: DropdownButton<String>(
-//               items: DeliveryList.map<DropdownMenuItem<String>>((String item) {
-//                 return DropdownMenuItem(
-//                   value: item,
-//                   child: Text('$item'),
-//                 );
-//               }).toList(),
-//               onChanged: (String? val) {
-//                 setState(() {
-//                   dropdownValue = val;
-//                 });
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
