@@ -10,6 +10,7 @@ class GoodsFirebaseModel {
   String? weight;
   String? stock;
   String? memo;
+  List<String>? imageUrls; // 1. 여러 이미지 URL을 저장할 리스트 필드 추가
 
   GoodsFirebaseModel({
     this.itemNumber,
@@ -21,6 +22,7 @@ class GoodsFirebaseModel {
     this.weight,
     this.stock,
     this.memo,
+    this.imageUrls, // 2. 생성자에 추가
   });
    // Firestore 데이터를 모델로 변환하는 부분을 더 안전하게 수정
   factory GoodsFirebaseModel.fromMap(Map<String, dynamic> json) {
@@ -35,6 +37,10 @@ class GoodsFirebaseModel {
       weight: json['상품무게'] as String? ?? '0',
       stock: json['상품재고'] as String? ?? '0',
       memo: json['메모'] as String? ?? '',
+      // 3. Firestore의 'imageUrls' 필드를 List<String>으로 변환
+      imageUrls: json['imageUrls'] != null
+          ? List<String>.from(json['imageUrls'])
+          : [],
     );
   }
 
@@ -49,6 +55,7 @@ class GoodsFirebaseModel {
       'weight': weight,
       'stock': stock,
       'memo': memo,
+      'imageUrls': imageUrls, // 4. Firestore에 저장할 필드 추가
     };
   }
 

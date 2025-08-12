@@ -27,9 +27,16 @@ class AddGoodsViewModel extends StateNotifier<AsyncValue<void>> {
     required String weight,
     required String stock,
     required String memo,
+     required String imageUrlsString, // 1. 이미지 URL 문자열을 받는 파라미터 추가
   }) async {
     state = const AsyncValue.loading();
     try {
+      // 2. 콤마(,)로 구분된 문자열을 공백 제거 후 리스트로 변환
+      final imageUrls = imageUrlsString
+          .split(',')
+          .map((url) => url.trim())
+          .where((url) => url.isNotEmpty) // 빈 문자열은 제외
+          .toList();
       // 입력받은 값으로 GoodsFirebaseModel 객체 생성
       final goods = GoodsFirebaseModel(
         itemNumber: itemNumber,
@@ -41,6 +48,7 @@ class AddGoodsViewModel extends StateNotifier<AsyncValue<void>> {
         weight: weight,
         stock: stock,
         memo: memo,
+        imageUrls: imageUrls, // 3. 변환된 리스트를 모델에 할당
       );
 
       await _repository.saveGoods(goods);

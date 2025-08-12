@@ -25,6 +25,7 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
   late final TextEditingController _weightController;
   late final TextEditingController _stockController;
   late final TextEditingController _memoController;
+  late final TextEditingController _imageUrlsController; // 1. 이미지 URL 컨트롤러 추가
 
   // Dropdown State
   String? _selectedCategory;
@@ -43,6 +44,7 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
     _stockController = TextEditingController(text: goods?.stock ?? '');
     _memoController = TextEditingController(text: goods?.memo ?? '');
     _selectedCategory = goods?.category;
+     _imageUrlsController = TextEditingController(text: goods?.imageUrls?.join(', ') ?? '');
   }
 
   @override
@@ -54,6 +56,7 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
     _weightController.dispose();
     _stockController.dispose();
     _memoController.dispose();
+    _imageUrlsController.dispose(); // 3. 컨트롤러 dispose 추가
     super.dispose();
   }
 
@@ -70,6 +73,7 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
                 weight: _weightController.text,
                 stock: _stockController.text,
                 memo: _memoController.text,
+                imageUrlsString: _imageUrlsController.text,
               );
       if (success && mounted) {
         Navigator.of(context).pop();
@@ -159,6 +163,18 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
                 controller: _memoController,
                 decoration: const InputDecoration(
                     labelText: '메모', border: OutlineInputBorder()),
+                maxLines: 3,
+              ),
+               const SizedBox(height: 16),
+
+              // 5. 이미지 URL 입력 필드 추가
+              TextFormField(
+                controller: _imageUrlsController,
+                decoration: const InputDecoration(
+                  labelText: '이미지 URL (콤마(,)로 구분)',
+                  border: OutlineInputBorder(),
+                  hintText: 'https://.../img1.jpg, https://.../img2.jpg',
+                ),
                 maxLines: 3,
               ),
               const SizedBox(height: 24),

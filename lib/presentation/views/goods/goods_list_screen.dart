@@ -74,12 +74,15 @@ class GoodsListScreen extends ConsumerWidget {
             horizontalMargin: 12,
             minWidth: 900, // 전체 테이블의 최소 너비를 지정하여 컬럼이 잘리지 않도록 함
             columns: const [
-              DataColumn(label: Text('카테고리')),
-              DataColumn(label: Text('상품명')),
-              DataColumn(label: Text('상품가격'), numeric: true),
-              DataColumn(label: Text('개당가격'), numeric: true),
-              DataColumn(label: Text('재고'), numeric: true),
-              DataColumn(label: Text('아이템넘버')),
+              DataColumn2(label: Text('카테고리'), size: ColumnSize.L),
+        DataColumn2(label: Text('아이템넘버'), size: ColumnSize.M), // <-- 위치 변경
+        DataColumn2(label: Text('상품명'), size: ColumnSize.L),
+        DataColumn2(label: Text('상품가격'), numeric: true, size: ColumnSize.M),
+        DataColumn2(label: Text('개당가격'), numeric: true, size: ColumnSize.M),
+        DataColumn2(label: Text('상품갯수'), numeric: true, size: ColumnSize.S), // <-- 추가
+        DataColumn2(label: Text('상품무게(g)'), numeric: true, size: ColumnSize.M), // <-- 추가
+        DataColumn2(label: Text('재고'), numeric: true, size: ColumnSize.S),
+        DataColumn2(label: Text('메모'), size: ColumnSize.L), // <-- 추가
             ],
             rows: goods.map((item) {
               final pricePerPiece = (double.tryParse(item.price ?? '0')! /
@@ -89,12 +92,14 @@ class GoodsListScreen extends ConsumerWidget {
               return DataRow(
                 cells: [
                   DataCell(Text(item.category ?? '')),
-                  DataCell(Text(item.title ?? '')),
-                  DataCell(Text(
-                      '${numberFormatter.format(double.tryParse(item.price ?? '0'))}원')),
-                  DataCell(Text('${numberFormatter.format(double.tryParse(pricePerPiece))}원')),
-                  DataCell(Text(item.stock ?? '0')),
-                  DataCell(Text(item.itemNumber ?? '')),
+            DataCell(Text(item.itemNumber ?? '')), // <-- 위치 변경
+            DataCell(Text(item.title ?? '', overflow: TextOverflow.ellipsis)),
+            DataCell(Text('${numberFormatter.format(double.tryParse(item.price ?? '0'))}원')),
+            DataCell(Text('${numberFormatter.format(double.tryParse(pricePerPiece))}원')),
+            DataCell(Text(item.number ?? '0')), // <-- 추가
+            DataCell(Text(item.weight ?? '0')),
+            DataCell(Text(item.stock ?? '0')),
+            DataCell(Text(item.memo ?? '', overflow: TextOverflow.ellipsis)), // <-- 추가
                 ],
                 onSelectChanged: (isSelected) {
                   if (isSelected ?? false) {
