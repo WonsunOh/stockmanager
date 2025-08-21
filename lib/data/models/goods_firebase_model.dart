@@ -44,18 +44,20 @@ class GoodsFirebaseModel {
     );
   }
 
+  // Dart 객체를 Firestore 데이터로 변환할 때 호출됨
   Map<String, dynamic> toMap() {
     return {
-      'itemNumber': itemNumber,
-      'category': category,
-      'title': title,
-      'inputDay': inputDay,
-      'number': number,
-      'price': price,
-      'weight': weight,
-      'stock': stock,
-      'memo': memo,
-      'imageUrls': imageUrls, // 4. Firestore에 저장할 필드 추가
+      // 여기도 동일하게 한글 필드명으로 수정합니다.
+      '아이템 넘버': itemNumber,
+      '카테고리': category,
+      '상품명': title,
+      '입력일': inputDay,
+      '상품갯수': number,
+      '상품가격': price,
+      '상품무게': weight,
+      '상품재고': stock,
+      '메모': memo,
+      'imageUrls': imageUrls,
     };
   }
 
