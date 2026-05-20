@@ -3,17 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/material_model.dart';
+import '../../../data/repositories/category_repository.dart';
 import '../../../data/repositories/material_repository.dart';
 import 'add_goods_screen.dart';
 
 class GoodsDetailScreen extends ConsumerWidget {
   final MaterialModel material;
 
-  const GoodsDetailScreen({Key? key, required this.material}) : super(key: key);
+  const GoodsDetailScreen({super.key, required this.material});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final numberFormatter = NumberFormat('###,###,###');
+    final treeAsync = ref.watch(categoryTreeProvider);
+    final categoryPath = treeAsync.maybeWhen(
+      data: (tree) => tree.pathString(material.categoryId),
+      orElse: () => material.firebaseCategory ?? '-',
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +100,7 @@ class GoodsDetailScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             _buildDetailRow('상품명', material.name),
             _buildDetailRow('아이템 넘버', material.originalItemNumber),
-            _buildDetailRow('카테고리', material.firebaseCategory),
+            _buildDetailRow('카테고리', categoryPath.isEmpty ? '-' : categoryPath),
             _buildDetailRow('상품 가격', '${numberFormatter.format(material.price ?? 0)}원'),
             _buildDetailRow('상품 갯수', '${material.quantity ?? 0}'),
             _buildDetailRow('상품 무게', '${material.weight ?? '0'}g'),

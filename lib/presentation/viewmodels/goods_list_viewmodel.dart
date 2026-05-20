@@ -2,14 +2,16 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/material_model.dart';
+import '../../data/repositories/category_repository.dart';
 import '../../data/repositories/material_repository.dart';
 
 final goodsSearchQueryProvider = StateProvider.autoDispose<String>((ref) => '');
 final goodsSortColumnIndexProvider = StateProvider.autoDispose<int>((ref) => 1);
 final goodsSortAscendingProvider = StateProvider.autoDispose<bool>((ref) => true);
 
-final goodsCategoryFilterProvider =
-    StateProvider.autoDispose<String>((ref) => '모든카테고리');
+/// Selected category id from the cascading filter. `null` = 전체.
+final goodsCategoryFilterIdProvider =
+    StateProvider.autoDispose<int?>((ref) => null);
 
 final goodsListViewModelProvider =
     StreamNotifierProvider.autoDispose<GoodsListViewModel, List<MaterialModel>>(
@@ -19,34 +21,41 @@ final goodsListViewModelProvider =
 class GoodsListViewModel extends AutoDisposeStreamNotifier<List<MaterialModel>> {
   @override
   Stream<List<MaterialModel>> build() {
-    final category = ref.watch(goodsCategoryFilterProvider);
     final repo = ref.watch(materialRepositoryProvider);
+    final filterId = ref.watch(goodsCategoryFilterIdProvider);
+    final treeAsync = ref.watch(categoryTreeProvider);
+    final allowedIds = filterId == null
+        ? null
+        : treeAsync.maybeWhen(
+            data: (tree) => tree.descendantIdsInclusive(filterId),
+            orElse: () => <int>{filterId},
+          );
 
-    final baseStream = (category == '모든카테고리')
-        ? repo.getMaterialsStream()
-        : repo.getMaterialsStreamByCategory(category);
-
-    return baseStream.map((list) {
+    return repo.getMaterialsStream().map((list) {
       final searchQuery = ref.watch(goodsSearchQueryProvider).toLowerCase();
       final sortColumnIndex = ref.watch(goodsSortColumnIndexProvider);
       final sortAscending = ref.watch(goodsSortAscendingProvider);
 
-      final filtered = searchQuery.isEmpty
-          ? list
-          : list.where((m) {
-              final nameMatch = m.name?.toLowerCase().contains(searchQuery) ?? false;
-              final codeMatch =
-                  m.originalItemNumber?.toLowerCase().contains(searchQuery) ?? false;
-              return nameMatch || codeMatch;
-            }).toList();
+      final filtered = list.where((m) {
+        if (allowedIds != null) {
+          if (m.categoryId == null || !allowedIds.contains(m.categoryId)) {
+            return false;
+          }
+        }
+        if (searchQuery.isEmpty) return true;
+        final nameMatch = m.name?.toLowerCase().contains(searchQuery) ?? false;
+        final codeMatch =
+            m.originalItemNumber?.toLowerCase().contains(searchQuery) ?? false;
+        return nameMatch || codeMatch;
+      }).toList();
 
       filtered.sort((a, b) {
         int compare;
         switch (sortColumnIndex) {
-          case 1: // 아이템넘버 (original_item_number)
+          case 1: // 아이템넘버
             compare = (a.originalItemNumber ?? '').compareTo(b.originalItemNumber ?? '');
             break;
-          case 2: // 상품명 (name)
+          case 2: // 상품명
             compare = (a.name ?? '').compareTo(b.name ?? '');
             break;
           default:
@@ -57,9 +66,5 @@ class GoodsListViewModel extends AutoDisposeStreamNotifier<List<MaterialModel>> 
 
       return filtered;
     });
-  }
-
-  void setCategory(String category) {
-    ref.read(goodsCategoryFilterProvider.notifier).state = category;
   }
 }

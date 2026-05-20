@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/material_model.dart';
 import '../../viewmodels/add_goods_viewmodel.dart';
+import '../../widgets/category_cascade_dropdown.dart';
 
 class AddGoodsScreen extends ConsumerStatefulWidget {
   final MaterialModel? material;
@@ -25,8 +26,7 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
   late final TextEditingController _stockController;
   late final TextEditingController _memoController;
 
-  String? _selectedCategory;
-  final List<String> _categories = ['과자', '사탕', '젤리', '초콜릿', '껌', '차,음료', '기타'];
+  int? _selectedCategoryId;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
     _weightController = TextEditingController(text: m?.weight ?? '');
     _stockController = TextEditingController(text: m?.stockQuantity?.toString() ?? '');
     _memoController = TextEditingController(text: m?.memo ?? '');
-    _selectedCategory = m?.firebaseCategory;
+    _selectedCategoryId = m?.categoryId;
   }
 
   @override
@@ -55,21 +55,26 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
   }
 
   void _submit() async {
-    if (_formKey.currentState!.validate()) {
-      final success = await ref.read(addGoodsViewModelProvider.notifier).saveGoods(
-            existingGoods: widget.material,
-            itemNumber: _itemNumberController.text,
-            title: _titleController.text,
-            category: _selectedCategory!,
-            price: _priceController.text,
-            number: _numberController.text,
-            weight: _weightController.text,
-            stock: _stockController.text,
-            memo: _memoController.text,
-          );
-      if (success && mounted) {
-        Navigator.of(context).pop();
-      }
+    if (!_formKey.currentState!.validate()) return;
+    if (_selectedCategoryId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('카테고리를 끝까지 선택해주세요.')),
+      );
+      return;
+    }
+    final success = await ref.read(addGoodsViewModelProvider.notifier).saveGoods(
+          existingGoods: widget.material,
+          itemNumber: _itemNumberController.text,
+          title: _titleController.text,
+          categoryId: _selectedCategoryId,
+          price: _priceController.text,
+          number: _numberController.text,
+          weight: _weightController.text,
+          stock: _stockController.text,
+          memo: _memoController.text,
+        );
+    if (success && mounted) {
+      Navigator.of(context).pop();
     }
   }
 
@@ -89,15 +94,9 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              DropdownButtonFormField<String>(
-                value: _selectedCategory,
-                decoration: const InputDecoration(
-                    labelText: '카테고리', border: OutlineInputBorder()),
-                items: _categories
-                    .map((c) => DropdownMenuItem(value: c, child: Text(c)))
-                    .toList(),
-                onChanged: (value) => setState(() => _selectedCategory = value),
-                validator: (value) => value == null ? '카테고리를 선택하세요.' : null,
+              CategoryCascadeDropdown(
+                initialCategoryId: widget.material?.categoryId,
+                onChanged: (id) => _selectedCategoryId = id,
               ),
               const SizedBox(height: 16),
               TextFormField(

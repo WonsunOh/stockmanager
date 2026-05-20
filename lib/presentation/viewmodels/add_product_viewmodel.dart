@@ -1,24 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/product_model.dart';
+import '../../data/repositories/category_repository.dart';
 import '../../data/repositories/material_repository.dart';
 import '../../data/repositories/product_repository.dart';
 import 'add_product_state.dart';
 
 final addProductViewModelProvider =
     StateNotifierProvider.autoDispose<AddProductViewModel, AddProductState>(
-  (ref) => AddProductViewModel(
-    ref.watch(materialRepositoryProvider),
-    ref.watch(productRepositoryProvider),
-  ),
+  (ref) => AddProductViewModel(ref),
 );
 
 class AddProductViewModel extends StateNotifier<AddProductState> {
-  final MaterialRepository _materialRepository;
-  final ProductRepository _productRepository;
+  final Ref _ref;
 
-  AddProductViewModel(this._materialRepository, this._productRepository)
-      : super(const AddProductState());
+  AddProductViewModel(this._ref) : super(const AddProductState());
+
+  MaterialRepository get _materialRepository =>
+      _ref.read(materialRepositoryProvider);
+  ProductRepository get _productRepository =>
+      _ref.read(productRepositoryProvider);
 
   /// Look up a material by its `original_item_number` (UI: 연관상품코드).
   Future<void> fetchRelatedGoods(String goodsCode) async {
@@ -91,6 +92,7 @@ class AddProductViewModel extends StateNotifier<AddProductState> {
   Future<bool> saveProduct({
     required String productNumber,
     required String productName,
+    required int? categoryId,
     required String numberOfPieces,
     required String commissionRate,
     required String earningRate,
@@ -102,12 +104,18 @@ class AddProductViewModel extends StateNotifier<AddProductState> {
     if (related == null) return false;
     state = state.copyWith(isSaving: true, clearSaveError: true);
     try {
+      String? firebaseCategoryFallback;
+      if (categoryId != null) {
+        final tree = await _ref.read(categoryTreeProvider.future);
+        firebaseCategoryFallback = tree.byId[categoryId]?.name;
+      }
       final newProduct = ProductModel(
         name: productName,
         productCode: productNumber,
         relatedProductCode: related.originalItemNumber,
-        categoryId: related.categoryId,
-        firebaseCategory: related.firebaseCategory,
+        categoryId: categoryId ?? related.categoryId,
+        firebaseCategory:
+            firebaseCategoryFallback ?? related.firebaseCategory,
         quantity: int.tryParse(numberOfPieces),
         unitPrice: int.tryParse(state.costPerPiece.split('.').first),
         weight: state.productWeight,

@@ -25,15 +25,6 @@ class MaterialRepository {
         .map((rows) => rows.map(MaterialModel.fromMap).toList());
   }
 
-  Stream<List<MaterialModel>> getMaterialsStreamByCategory(String category) {
-    return _client
-        .from(_table)
-        .stream(primaryKey: ['id'])
-        .eq('firebase_category', category)
-        .order('id')
-        .map((rows) => rows.map(MaterialModel.fromMap).toList());
-  }
-
   /// Upsert. If `id` is set → update; otherwise insert (new row).
   Future<MaterialModel> save(MaterialModel material) async {
     final payload = material.toMap();
