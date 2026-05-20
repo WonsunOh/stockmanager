@@ -29,7 +29,10 @@ jobs:
       - name: Pub 새로 가져오기
         run: flutter pub get
       - name: 플러터 웹 빌드
-        run: flutter build web --base-href "/stockmanager/"
+        run: |
+          flutter build web --base-href "/stockmanager/" \
+            --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
+            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
       - name: Github Pages 배포
         uses: peaceiris/actions-gh-pages@v3
         with:
