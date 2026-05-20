@@ -1,44 +1,49 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stockmanager/data/repositories/goods_repository.dart';
-import 'package:stockmanager/data/repositories/product_repository.dart';
+
 import '../../data/models/product_model.dart';
+import '../../data/repositories/material_repository.dart';
+import '../../data/repositories/product_repository.dart';
 import 'add_product_state.dart';
 
-// Provider 생성
 final addProductViewModelProvider =
     StateNotifierProvider.autoDispose<AddProductViewModel, AddProductState>(
   (ref) => AddProductViewModel(
-    ref.watch(goodsRepositoryProvider),
+    ref.watch(materialRepositoryProvider),
     ref.watch(productRepositoryProvider),
   ),
 );
 
 class AddProductViewModel extends StateNotifier<AddProductState> {
-  final GoodsRepository _goodsRepository;
+  final MaterialRepository _materialRepository;
   final ProductRepository _productRepository;
 
-  AddProductViewModel(this._goodsRepository, this._productRepository)
+  AddProductViewModel(this._materialRepository, this._productRepository)
       : super(const AddProductState());
 
-  // 연관 상품 정보 가져오기
-  Future<void> fetchRelatedGoods(String goodsId) async {
-    state = state.copyWith(isLoadingGoods: true, goodsError: null);
+  /// Look up a material by its `original_item_number` (UI: 연관상품코드).
+  Future<void> fetchRelatedGoods(String goodsCode) async {
+    state = state.copyWith(isLoadingGoods: true, clearGoodsError: true);
     try {
-      // GoodsRepository를 통해 특정 상품의 Stream을 가져옴
-      final goodsStream = _goodsRepository.getGoodsStream(); // Firestore에서 Goods 데이터를 가져오는 방식에 따라 수정이 필요할 수 있습니다.
-      // 예시: goodsRepository에 getGoodsById(goodsId) 메서드가 있다면 더 효율적입니다.
-      // final goods = await _goodsRepository.getGoodsById(goodsId);
-      
-      // 임시로 전체 리스트에서 찾기
-      final allGoods = await goodsStream.first;
-      final goods = allGoods.firstWhere((g) => g.itemNumber == goodsId, orElse: () => throw Exception('상품을 찾을 수 없습니다.'));
-      
-      final costPerPiece = (double.parse(goods.price!) / double.parse(goods.number!)).toStringAsFixed(1);
-      final weightPerPiece = (double.parse(goods.weight!) / double.parse(goods.number!)).toStringAsFixed(1);
+      final allMaterials = await _materialRepository.getMaterialsStream().first;
+      final material = allMaterials.firstWhere(
+        (m) => m.originalItemNumber == goodsCode,
+        orElse: () => throw Exception('상품을 찾을 수 없습니다.'),
+      );
+
+      final priceNum = material.price ?? 0;
+      final quantityNum = material.quantity ?? 0;
+      final weightNum = double.tryParse(material.weight ?? '') ?? 0;
+
+      if (quantityNum == 0) {
+        throw Exception('상품 갯수가 0이라 개당 원가를 계산할 수 없습니다.');
+      }
+
+      final costPerPiece = (priceNum / quantityNum).toStringAsFixed(1);
+      final weightPerPiece = (weightNum / quantityNum).toStringAsFixed(1);
 
       state = state.copyWith(
         isLoadingGoods: false,
-        relatedGoods: goods,
+        relatedGoods: material,
         costPerPiece: costPerPiece,
         weightPerPiece: weightPerPiece,
       );
@@ -47,7 +52,6 @@ class AddProductViewModel extends StateNotifier<AddProductState> {
     }
   }
 
-  // 판매가 등 계산 로직
   void calculate({
     required String numberOfPieces,
     required String commissionRate,
@@ -57,17 +61,24 @@ class AddProductViewModel extends StateNotifier<AddProductState> {
   }) {
     if (state.relatedGoods == null) return;
 
-    final pCost = (double.parse(state.costPerPiece) * int.parse(numberOfPieces));
-    final pWeight = (double.parse(state.weightPerPiece) * int.parse(numberOfPieces));
-    
-    double sPrice;
-    final costForCalc = isFreeShipping ? pCost + double.parse(deliveryCharge) : pCost;
-    sPrice = (costForCalc / (1 - (double.parse(earningRate)/100) - (double.parse(commissionRate)/100)));
-    sPrice = (sPrice / 10).round() * 10.0; // 1의 자리에서 반올림
+    final pieces = int.tryParse(numberOfPieces) ?? 0;
+    final pCost = (double.tryParse(state.costPerPiece) ?? 0) * pieces;
+    final pWeight = (double.tryParse(state.weightPerPiece) ?? 0) * pieces;
 
-    final commission = (sPrice * (double.parse(commissionRate) / 100)).round();
-    final earning = (sPrice * (double.parse(earningRate) / 100)).round();
-    
+    final eRate = double.tryParse(earningRate) ?? 0;
+    final cRate = double.tryParse(commissionRate) ?? 0;
+    final dCharge = double.tryParse(deliveryCharge) ?? 0;
+
+    final denominator = 1 - (eRate / 100) - (cRate / 100);
+    if (denominator <= 0) return;
+
+    final costForCalc = isFreeShipping ? pCost + dCharge : pCost;
+    double sPrice = costForCalc / denominator;
+    sPrice = (sPrice / 10).round() * 10.0;
+
+    final commission = (sPrice * (cRate / 100)).round();
+    final earning = (sPrice * (eRate / 100)).round();
+
     state = state.copyWith(
       productCost: pCost.toString(),
       productWeight: pWeight.toString(),
@@ -77,9 +88,7 @@ class AddProductViewModel extends StateNotifier<AddProductState> {
     );
   }
 
-  // 최종 제품 저장 로직
   Future<bool> saveProduct({
-    /* form에서 입력받은 모든 데이터 */
     required String productNumber,
     required String productName,
     required String numberOfPieces,
@@ -89,30 +98,30 @@ class AddProductViewModel extends StateNotifier<AddProductState> {
     required String stock,
     required String memo,
   }) async {
-    if (state.relatedGoods == null) return false;
-    state = state.copyWith(isSaving: true, saveError: null);
+    final related = state.relatedGoods;
+    if (related == null) return false;
+    state = state.copyWith(isSaving: true, clearSaveError: true);
     try {
-      final newProduct = ProductFirebaseModel(
-        itemNumber: productNumber,
-        title: productName,
-        g_itemNumber: state.relatedGoods!.itemNumber,
-        g_title: state.relatedGoods!.title,
-        category: state.relatedGoods!.category,
-        number: numberOfPieces,
-        p_price: state.costPerPiece,
+      final newProduct = ProductModel(
+        name: productName,
+        productCode: productNumber,
+        relatedProductCode: related.originalItemNumber,
+        categoryId: related.categoryId,
+        firebaseCategory: related.firebaseCategory,
+        quantity: int.tryParse(numberOfPieces),
+        unitPrice: int.tryParse(state.costPerPiece.split('.').first),
         weight: state.productWeight,
-        costPrice: state.productCost,
-        price: state.sellingPrice,
-        commission: state.commission,
-        earning: state.earning,
-        commissionRate: commissionRate,
-        earningRate: earningRate,
+        costPrice: int.tryParse(state.productCost.split('.').first),
+        totalPrice: int.tryParse(state.sellingPrice.split('.').first),
+        commission: num.tryParse(state.commission),
+        earning: num.tryParse(state.earning),
+        commissionRate: num.tryParse(commissionRate),
+        earningRate: num.tryParse(earningRate),
         deliveryMethod: deliveryMethod,
-        stock: stock,
+        stockQuantity: int.tryParse(stock),
         memo: memo,
-        inputDay: DateTime.now().toString(),
       );
-      await _productRepository.saveProduct(newProduct);
+      await _productRepository.save(newProduct);
       state = state.copyWith(isSaving: false);
       return true;
     } catch (e) {

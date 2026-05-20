@@ -1,35 +1,37 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/product_model.dart';
+import 'material_repository.dart' show supabaseClientProvider;
 
-// Provider 생성
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
-  return ProductRepository(FirebaseFirestore.instance);
+  return ProductRepository(ref.watch(supabaseClientProvider));
 });
 
 class ProductRepository {
-  final FirebaseFirestore _firestore;
+  final SupabaseClient _client;
+  static const _table = 'products';
 
-  ProductRepository(this._firestore);
+  ProductRepository(this._client);
 
-  // 제품 목록 Stream 가져오기
-  Stream<List<ProductFirebaseModel>> getProductsStream() {
-    return _firestore.collection('productData').snapshots().map((snapshot) =>
-        snapshot.docs.map((doc) => ProductFirebaseModel.fromMap(doc.data())).toList());
-  }
-  
-  // 제품 추가/수정
-  Future<void> saveProduct(ProductFirebaseModel product) async {
-    // 제품 코드가 null이 아닌지 확인
-    if (product.itemNumber == null || product.itemNumber!.isEmpty) {
-      throw Exception("제품 코드는 비어 있을 수 없습니다.");
-    }
-    await _firestore.collection('productData').doc(product.itemNumber).set(product.toMap());
+  Stream<List<ProductModel>> getProductsStream() {
+    return _client
+        .from(_table)
+        .stream(primaryKey: ['id'])
+        .order('id')
+        .map((rows) => rows.map(ProductModel.fromMap).toList());
   }
 
-  // 제품 삭제 (필요 시)
-  Future<void> deleteProduct(String itemNumber) async {
-    await _firestore.collection('productData').doc(itemNumber).delete();
+  /// Upsert. `id` set → update; otherwise insert.
+  Future<ProductModel> save(ProductModel product) async {
+    final payload = product.toMap();
+    final response = product.id == null
+        ? await _client.from(_table).insert(payload).select().single()
+        : await _client.from(_table).update(payload).eq('id', product.id!).select().single();
+    return ProductModel.fromMap(response);
+  }
+
+  Future<void> delete(int id) async {
+    await _client.from(_table).delete().eq('id', id);
   }
 }

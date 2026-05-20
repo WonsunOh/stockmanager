@@ -145,7 +145,7 @@ class _AddProductScreenState extends ConsumerState<AddProductScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('구성 상품: ${state.relatedGoods!.title}', style: Theme.of(context).textTheme.titleMedium),
+                        Text('구성 상품: ${state.relatedGoods!.name}', style: Theme.of(context).textTheme.titleMedium),
                         const SizedBox(height: 8),
                         Text('개당 원가: ${state.costPerPiece}원'),
                         Text('개당 무게: ${state.weightPerPiece}g'),

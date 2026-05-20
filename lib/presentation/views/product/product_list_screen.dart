@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:stockmanager/presentation/viewmodels/product_list_viewmodel.dart';
 
-// TODO: AddProductScreen 경로 추가 필요
-// import 'add_product_screen.dart'; 
+import '../../viewmodels/product_list_viewmodel.dart';
 
 class ProductListScreen extends ConsumerWidget {
   const ProductListScreen({Key? key}) : super(key: key);
@@ -18,15 +16,13 @@ class ProductListScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('제품 목록'),
         leading: IconButton(
-          onPressed: () => Navigator.pushNamed(context,'/'),
+          onPressed: () => Navigator.pushNamed(context, '/'),
           icon: const Icon(Icons.home),
         ),
         actions: [
           IconButton(
             tooltip: '제품 추가',
-            onPressed: () {
-              // Get.to(() => const AddProductScreen()); // TODO: 제품 추가 화면으로 이동
-            },
+            onPressed: () => Navigator.pushNamed(context, '/addProduct'),
             icon: const Icon(Icons.add),
           ),
         ],
@@ -46,16 +42,16 @@ class ProductListScreen extends ConsumerWidget {
             rows: products.map((item) {
               return DataRow(
                 cells: [
-                  DataCell(Text(item.title ?? '')),
-                  DataCell(Text(item.itemNumber ?? '')),
-                  DataCell(Text('${numberFormatter.format(double.tryParse(item.costPrice ?? '0'))}원')),
-                  DataCell(Text('${numberFormatter.format(double.tryParse(item.price ?? '0'))}원')),
-                  DataCell(Text('${numberFormatter.format(double.tryParse(item.earning ?? '0'))}원')),
-                  DataCell(Text(item.stock ?? '0')),
+                  DataCell(Text(item.name ?? '')),
+                  DataCell(Text(item.productCode ?? '')),
+                  DataCell(Text('${numberFormatter.format(item.costPrice ?? 0)}원')),
+                  DataCell(Text('${numberFormatter.format(item.totalPrice ?? 0)}원')),
+                  DataCell(Text('${numberFormatter.format(item.earning ?? 0)}원')),
+                  DataCell(Text('${item.stockQuantity ?? 0}')),
                 ],
                 onSelectChanged: (isSelected) {
                   if (isSelected ?? false) {
-                    // TODO: 제품 상세 화면으로 이동하는 로직
+                    // TODO: 제품 상세 화면
                   }
                 },
               );

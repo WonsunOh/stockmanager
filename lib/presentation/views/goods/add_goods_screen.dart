@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stockmanager/presentation/viewmodels/add_goods_viewmodel.dart';
 
-import '../../../data/models/goods_firebase_model.dart';
+import '../../../data/models/material_model.dart';
+import '../../viewmodels/add_goods_viewmodel.dart';
 
 class AddGoodsScreen extends ConsumerStatefulWidget {
-  final GoodsFirebaseModel? goods; // 수정을 위한 기존 상품 데이터
+  final MaterialModel? material;
 
-  const AddGoodsScreen({super.key, this.goods});
+  const AddGoodsScreen({super.key, this.material});
 
   @override
   ConsumerState<AddGoodsScreen> createState() => _AddGoodsScreenState();
@@ -17,7 +17,6 @@ class AddGoodsScreen extends ConsumerStatefulWidget {
 class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // Form Field Controllers
   late final TextEditingController _itemNumberController;
   late final TextEditingController _titleController;
   late final TextEditingController _priceController;
@@ -25,26 +24,22 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
   late final TextEditingController _weightController;
   late final TextEditingController _stockController;
   late final TextEditingController _memoController;
-  late final TextEditingController _imageUrlsController; // 1. 이미지 URL 컨트롤러 추가
 
-  // Dropdown State
   String? _selectedCategory;
   final List<String> _categories = ['과자', '사탕', '젤리', '초콜릿', '껌', '차,음료', '기타'];
 
   @override
   void initState() {
     super.initState();
-    final goods = widget.goods;
-    _itemNumberController =
-        TextEditingController(text: goods?.itemNumber ?? '');
-    _titleController = TextEditingController(text: goods?.title ?? '');
-    _priceController = TextEditingController(text: goods?.price ?? '');
-    _numberController = TextEditingController(text: goods?.number ?? '');
-    _weightController = TextEditingController(text: goods?.weight ?? '');
-    _stockController = TextEditingController(text: goods?.stock ?? '');
-    _memoController = TextEditingController(text: goods?.memo ?? '');
-    _selectedCategory = goods?.category;
-     _imageUrlsController = TextEditingController(text: goods?.imageUrls?.join(', ') ?? '');
+    final m = widget.material;
+    _itemNumberController = TextEditingController(text: m?.originalItemNumber ?? '');
+    _titleController = TextEditingController(text: m?.name ?? '');
+    _priceController = TextEditingController(text: m?.price?.toString() ?? '');
+    _numberController = TextEditingController(text: m?.quantity?.toString() ?? '');
+    _weightController = TextEditingController(text: m?.weight ?? '');
+    _stockController = TextEditingController(text: m?.stockQuantity?.toString() ?? '');
+    _memoController = TextEditingController(text: m?.memo ?? '');
+    _selectedCategory = m?.firebaseCategory;
   }
 
   @override
@@ -56,25 +51,22 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
     _weightController.dispose();
     _stockController.dispose();
     _memoController.dispose();
-    _imageUrlsController.dispose(); // 3. 컨트롤러 dispose 추가
     super.dispose();
   }
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
-      final success =
-          await ref.read(addGoodsViewModelProvider.notifier).saveGoods(
-                existingGoods: widget.goods,
-                itemNumber: _itemNumberController.text,
-                title: _titleController.text,
-                category: _selectedCategory!,
-                price: _priceController.text,
-                number: _numberController.text,
-                weight: _weightController.text,
-                stock: _stockController.text,
-                memo: _memoController.text,
-                imageUrlsString: _imageUrlsController.text,
-              );
+      final success = await ref.read(addGoodsViewModelProvider.notifier).saveGoods(
+            existingGoods: widget.material,
+            itemNumber: _itemNumberController.text,
+            title: _titleController.text,
+            category: _selectedCategory!,
+            price: _priceController.text,
+            number: _numberController.text,
+            weight: _weightController.text,
+            stock: _stockController.text,
+            memo: _memoController.text,
+          );
       if (success && mounted) {
         Navigator.of(context).pop();
       }
@@ -84,10 +76,11 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(addGoodsViewModelProvider).isLoading;
+    final isEdit = widget.material != null;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.goods == null ? '상품 추가' : '상품 수정'),
+        title: Text(isEdit ? '상품 수정' : '상품 추가'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -113,7 +106,7 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
                     labelText: '상품코드', border: OutlineInputBorder()),
                 validator: (v) =>
                     v == null || v.isEmpty ? '상품코드를 입력하세요.' : null,
-                readOnly: widget.goods != null, // 수정 시에는 상품코드 변경 불가
+                readOnly: isEdit,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -163,18 +156,6 @@ class _AddGoodsScreenState extends ConsumerState<AddGoodsScreen> {
                 controller: _memoController,
                 decoration: const InputDecoration(
                     labelText: '메모', border: OutlineInputBorder()),
-                maxLines: 3,
-              ),
-               const SizedBox(height: 16),
-
-              // 5. 이미지 URL 입력 필드 추가
-              TextFormField(
-                controller: _imageUrlsController,
-                decoration: const InputDecoration(
-                  labelText: '이미지 URL (콤마(,)로 구분)',
-                  border: OutlineInputBorder(),
-                  hintText: 'https://.../img1.jpg, https://.../img2.jpg',
-                ),
                 maxLines: 3,
               ),
               const SizedBox(height: 24),

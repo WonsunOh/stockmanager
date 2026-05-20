@@ -9,16 +9,6 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('코스트고 재고관리'),
-        actions: [
-          IconButton(
-            tooltip: '메모',
-            onPressed: () {
-              // Get.to(() => const MemoList()); -> Navigator.pushNamed(context, '/memoList');
-              Navigator.pushNamed(context, '/memoList');
-            },
-            icon: const Icon(Icons.add_comment),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

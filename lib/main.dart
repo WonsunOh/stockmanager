@@ -1,31 +1,26 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'firebase_options.dart';
 import 'presentation/views/goods/add_goods_screen.dart';
 import 'presentation/views/goods/goods_list_screen.dart';
 import 'presentation/views/home_screen.dart';
-import 'presentation/views/memo/add_memo_screen.dart';
-import 'presentation/views/memo/memo_list.dart';
 import 'presentation/views/product/add_product_screen.dart';
 import 'presentation/views/product/product_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-    // options: const FirebaseOptions(
-    //   apiKey: 'AIzaSyBgnKjsYA8glr8jQ8oqlhYoYUw0v4BPlEk',
-    //   appId: '1:174794732202:web:244ba86eab637d4f22d6d3',
-    //   messagingSenderId: '174794732202',
-    //   projectId: 'goodsstockmanager',
-    // ),
+
+  await dotenv.load(fileName: '.env');
+
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
 
   runApp(
-    // ProviderScope로 MyApp을 감싸줍니다.
     const ProviderScope(
       child: MyApp(),
     ),
@@ -35,7 +30,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -50,16 +44,12 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-        '/': (context) => const HomeScreen(), // 기존 MyHome을 HomeScreen으로 변경
-        '/goodsList': (context) => const GoodsListScreen(),
-        '/addGoods': (context) => const AddGoodsScreen(),
-        '/productList':(context) => const ProductListScreen(),
-        '/addProduct': (context) => const AddProductScreen(),
-        '/memoList': (context) => const MemoListScreen(),
-        '/addMemo': (context) => const AddMemoScreen(),
-      },
-
-        // localization 선언
+          '/': (context) => const HomeScreen(),
+          '/goodsList': (context) => const GoodsListScreen(),
+          '/addGoods': (context) => const AddGoodsScreen(),
+          '/productList': (context) => const ProductListScreen(),
+          '/addProduct': (context) => const AddProductScreen(),
+        },
         localizationsDelegates: const [
           GlobalWidgetsLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
